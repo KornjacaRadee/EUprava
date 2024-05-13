@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Login & Registration Form</title>
+    <link rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <input type="checkbox" id="check" />
+      <div class="login form">
+        <header>Login</header>
+        <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+        <form (submit)="loginUser()">
+          <input
+            type="text"
+            placeholder="Enter your email"
+            [(ngModel)]="user.email"
+            name="email"
+          />
+          <input
+            type="password"
+            placeholder="Enter your password"
+            [(ngModel)]="user.password"
+            name="password"
+          />
+          <input type="submit" class="button" value="Login" />
+        </form>
+        <div class="signup">
+          <a [routerLink]="'/register'"><span class="signup">Don't have an account? </span></a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
