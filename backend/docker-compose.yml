@@ -19,6 +19,28 @@ services:
     networks:
       - network
 
+  law_court:
+    build:
+      context: law_court/
+      dockerfile: Dockerfile
+    restart: always
+    container_name: "law_court"
+    hostname: "law_court"
+    ports:
+      - 8083:8083
+    environment:
+      - PORT=8083
+      - MONGO_DB_URI=mongodb://root:pass@auth_db:27017
+      - AUTH_SERVICE_URL=http://auth_service:8082
+    depends_on:
+      auth_db:
+        condition: service_healthy
+    networks:
+      - network
+  
+
+
+
 
   auth_db:
     hostname: "auth_db"
