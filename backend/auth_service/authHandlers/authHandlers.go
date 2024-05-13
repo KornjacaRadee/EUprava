@@ -54,6 +54,7 @@ func HandleRegister(dbClient *mongo.Client) http.HandlerFunc {
 			return
 		}
 		newUser.Password = hashedPassword
+		newUser.Role = "user"
 
 		// Register the user
 		newUser.ID = primitive.NewObjectID()
