@@ -1,0 +1,50 @@
+<!-- court-home.component.html -->
+<div>
+  <h2>Vasi Papiri</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Naslov</th>
+        <th scope="col">Opis</th>
+        <th scope="col">Datum Izdavanja</th>
+        <th scope="col">Vazi do</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let entity of entities; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ entity.title }}</td>
+        <td>{{ entity.description }}</td>
+        <td>{{ entity.issueDate }}</td>
+        <td>{{ entity.dueToDate }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div>
+  <h2>Nalozi</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Naslov</th>
+        <th scope="col">Opis</th>
+        <th scope="col">Datum Izdavanja</th>
+        <th scope="col">Vazi do</th>
+        <th scope="col">Adresa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let warrant of warrants; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ warrant.title }}</td>
+        <td>{{ warrant.description }}</td>
+        <td>{{ warrant.issueDate }}</td>
+        <td>{{ warrant.dueToDate }}</td>
+        <td>{{ warrant.address }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
