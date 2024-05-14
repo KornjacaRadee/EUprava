@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CourtService } from '../court.service';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-law-etitities',
@@ -13,9 +14,21 @@ export class CreateLawEtititiesComponent implements OnInit{
   warrant: any = { title: '', description: '', issueDate: '', dueToDate: '', userId: '', address: '' };
   hearing: any = { title: '', description: '', scheduledAt: '', duration: 0, legalEntityId: '' };
 
-  constructor(private courtService: CourtService) { }
+  constructor(private courtService: CourtService, private authService: AuthService,private router: Router) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    if(!this.isCourtWorker()){
+      this.router.navigate(['/court-home']);
+    }
+  }
+
+  isCourtWorker(): boolean{
+    if(this.authService.getUserRole() == "courtWorker"){
+      return true
+    }else{
+      return false
+    }
+  }
 
   openForm(formType: string) {
     this.selectedForm = formType;
