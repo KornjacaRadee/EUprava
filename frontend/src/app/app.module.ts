@@ -11,13 +11,15 @@ import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CourtHomeComponent } from './court-home/court-home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegisterComponent,
     LoginComponent,
-    CourtHomeComponent
+    CourtHomeComponent,
+    NavbarComponent
 
   ],
   imports: [
