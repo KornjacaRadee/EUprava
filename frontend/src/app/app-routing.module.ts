@@ -4,6 +4,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { CourtHomeComponent } from './court-home/court-home.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-etitities.component';
 const routes: Routes = [
   {
     path: '',
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: 'court-home',
     component: CourtHomeComponent,
+  },
+  {
+    path: 'create-law-etitities',
+    component: CreateLawEtititiesComponent,
   },
 
 
