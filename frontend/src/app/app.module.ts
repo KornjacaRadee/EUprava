@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CourtHomeComponent } from './court-home/court-home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './navbar/navbar.component';
+import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-etitities.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     RegisterComponent,
     LoginComponent,
     CourtHomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    CreateLawEtititiesComponent
 
   ],
   imports: [
