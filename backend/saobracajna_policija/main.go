@@ -50,6 +50,10 @@ func main() {
 	router.HandleFunc("/nesreca", handler.GetNesrece).Methods(http.MethodGet)
 
 	router.HandleFunc("/prekrsaji", handler.GetPrekrsaji).Methods(http.MethodGet)
+
+	router.HandleFunc("/nesreca/{id}", handler.DeleteNesreca).Methods(http.MethodDelete)
+	router.HandleFunc("/prekrsaj/{id}", handler.DeletePrekrsaj).Methods(http.MethodDelete)
+
 	// Kreiranje HTTP servera
 	server := &http.Server{
 		Addr:         ":8084",

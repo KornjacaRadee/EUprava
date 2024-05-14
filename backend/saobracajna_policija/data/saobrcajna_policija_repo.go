@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -102,4 +103,26 @@ func (pr *SaobracajnaPolicijaRepo) GetPrekrsaji(ctx context.Context) ([]Prekrsaj
 	}
 
 	return prekrsaji, nil
+}
+
+func (pr *SaobracajnaPolicijaRepo) DeleteNesreca(ctx context.Context, id primitive.ObjectID) error {
+	collection := pr.cli.Database(dbName).Collection("nesrece")
+
+	_, err := collection.DeleteOne(ctx, bson.M{"_id": id})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (pr *SaobracajnaPolicijaRepo) DeletePrekrsaj(ctx context.Context, id primitive.ObjectID) error {
+	collection := pr.cli.Database(dbName).Collection("prekrsaji")
+
+	_, err := collection.DeleteOne(ctx, bson.M{"_id": id})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
