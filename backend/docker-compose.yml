@@ -1,6 +1,28 @@
 version: "3.1"
 
 services:
+
+
+  saobracajna_policija:
+      build:
+        context: saobracajna_policija/
+        dockerfile: Dockerfile
+      restart: always
+      container_name: "saobracajna_policija"
+      hostname: "saobracajna_policija"
+      ports:
+        - 8084:8084
+      environment:
+        - PORT=8084
+        - SAOBRACAJNA_POLICIJA_DB_HOST=saobracajna_policija_db
+        - SAOBRACAJNA_POLICIJA_DB_PORT=27017
+        - SAOBRACAJNA_POLICIJA_DB_NAME=saobracajnaDB
+      depends_on:
+        saobracajna_policija_db:
+          condition: service_healthy
+      networks:
+        - network
+
        auth_service:
          build:
            context: auth_service/
@@ -134,6 +156,28 @@ services:
           retries: 10
         networks:
           - network
+
+  saobracajna_policija_db:
+    image: mongo
+    container_name: saobracajna_policija_db
+    restart: on-failure
+
+    ports:
+      - "27020:27017"
+
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok'
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    networks:
+      - network
+
+
+
+
+
+
 
 volumes:
        auth_db:
