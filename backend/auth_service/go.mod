@@ -7,7 +7,6 @@ require (
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/sirupsen/logrus v1.9.3
-	github.com/sony/gobreaker v1.0.0
 	go.mongodb.org/mongo-driver v1.15.0
 	golang.org/x/crypto v0.17.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
