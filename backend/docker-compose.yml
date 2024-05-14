@@ -37,6 +37,25 @@ services:
       - network
 
 
+  law_court:
+    build:
+      context: law_court/
+      dockerfile: Dockerfile
+    restart: always
+    container_name: "law_court"
+    hostname: "law_court"
+    ports:
+      - 8083:8083
+    environment:
+      - PORT=8083
+      - MONGO_DB_URI=mongodb://root:pass@auth_db:27017
+      - AUTH_SERVICE_URL=http://auth_service:8082
+    depends_on:
+      auth_db:
+        condition: service_healthy
+    networks:
+      - network
+  
   auth_db:
     hostname: "auth_db"
     container_name: "auth_db"
@@ -58,9 +77,33 @@ services:
     networks:
       - network
 
+
   statistika_db:
     hostname: "statistika_db"
     container_name: "statistika_db"
+
+  mupvozila_service:
+    build:
+      context: mupvozila_service/
+      dockerfile: Dockerfile
+    restart: always
+    container_name: "mupvozila_service"
+    hostname: "mupvozila_service"
+    ports:
+      - 8081:8081
+    environment:
+      - PORT=8081
+      - MONGO_DB_URI=mongodb://root:pass@mupvozila_db:27017
+    depends_on:
+      mupvozila_db:
+        condition: service_healthy
+    networks:
+      - network
+
+  mupvozila_db:
+    hostname: "mupvozila_db"
+    container_name: "mupvozila_db"
+
     image: mongo
     restart: always
     ports:
@@ -68,13 +111,18 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: pass
+
       MONGO_INITDB_DATABASE: statistikaDB
+
+      MONGO_INITDB_DATABASE: mupVozilaDB
+
     healthcheck:
       test: echo 'db.runCommand("ping").ok'
       interval: 10s
       timeout: 10s
       retries: 10
     volumes:
+
       - statistika_db:/data/db
     networks:
       - network
@@ -82,6 +130,15 @@ services:
 volumes:
   auth_db:
   statistika_db:
+      - mupvozila_db:/data/db
+    networks:
+      - network
+
+
+volumes:
+  auth_db:
+  mupvozila_db:
+
 
 networks:
   network:

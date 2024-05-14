@@ -42,7 +42,7 @@ func main() {
 	r.HandleFunc("/login", authHandlers.HandleLogin(dbClient)).Methods("POST")
 	r.HandleFunc("/users", authHandlers.HandleGetAllUsers(dbClient)).Methods("GET")
 	//r.HandleFunc("/user", authHandlers.HandleDeleteUser(dbClient, reservation, accommodation, profile)).Methods("DELETE")
-	//r.HandleFunc("/users/{id}", authHandlers.HandleGetUserByID(dbClient)).Methods("GET")
+	r.HandleFunc("/users/{id}", authHandlers.HandleGetUserByID(dbClient)).Methods("GET")
 	// change user passwrod
 	//r.HandleFunc("/change-password", authHandlers.HandleChangePassword(dbClient)).Methods("POST")
 
