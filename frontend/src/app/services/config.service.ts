@@ -14,13 +14,15 @@ export class ConfigService {
   _login_url: string;
   _court_url: string;
 
-
+  _create_entity: string;
   _get_user_entities: string;
   _get_entity: string;
 
+  _create_warrant: string;
   _get_user_warrant: string;
   _get_warrant: string;
 
+  _create_hearing: string;
   _get_user_hearing: string;
   _get_hearing: string;
 
@@ -39,12 +41,15 @@ export class ConfigService {
 
 //COURT ROUTES
 
+    this._create_entity = this._court_url + '/legal_entities';
     this._get_user_entities = this._court_url + '/legal_entities/user/';
     this._get_entity = this._court_url + '/legal_entities/';
 
+    this._create_warrant = this._court_url + '/house_search_warrants';
     this._get_user_warrant = this._court_url + '/house_search_warrants/user/';
     this._get_warrant = this._court_url + '/house_search_warrants/';
 
+    this._create_hearing = this._court_url + '/hearings'
     this._get_user_hearing = this._court_url + '/hearings/user/';
     this._get_hearing = this._court_url + '/hearings/';
 
