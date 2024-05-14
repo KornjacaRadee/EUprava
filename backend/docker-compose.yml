@@ -19,6 +19,23 @@ services:
     networks:
       - network
 
+  statistika_service:
+    build:
+      context: statistika_service/
+      dockerfile: Dockerfile
+    restart: always
+    container_name: "statistika_service"
+    hostname: "statistika_service"
+    ports:
+      - 8083:8083
+    environment:
+      - PORT=8083
+      - MONGO_DB_URI=mongodb://root:pass@statistika_db:27017
+    depends_on:
+      - statistika_db
+    networks:
+      - network
+
 
   auth_db:
     hostname: "auth_db"
@@ -41,9 +58,30 @@ services:
     networks:
       - network
 
+  statistika_db:
+    hostname: "statistika_db"
+    container_name: "statistika_db"
+    image: mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABASE: statistikaDB
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok'
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - statistika_db:/data/db
+    networks:
+      - network
+
 volumes:
   auth_db:
-  mong_express_data:
+  statistika_db:
 
 networks:
   network:
