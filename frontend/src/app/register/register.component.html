@@ -23,6 +23,7 @@
           <div *ngIf="registrationForm.get('name')!.hasError('pattern') && registrationForm.get('name')!.touched" class="validation-error">
             Name should contain only letters.
           </div>
+
         </div>
 
         <div class="input-box">
@@ -37,6 +38,14 @@
           <div *ngIf="registrationForm.get('last_name')!.hasError('pattern') && registrationForm.get('last_name')!.touched" class="validation-error">
             Last Name should contain only letters.
           </div>
+        </div>
+
+        <div class="input-box">
+          <input
+            type="text"
+            placeholder="Enter your jmbg"
+            formControlName="jmbg"
+          />
         </div>
 
         <div class="input-box">
