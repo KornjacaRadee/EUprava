@@ -62,3 +62,59 @@ func GetVehicleByID(id primitive.ObjectID) (*RegisterVehicle, error) {
 	}
 	return &vehicle, err
 }
+
+// GetAllLicenses retrieves all driver's licenses from the database
+func GetAllLicenses() ([]*License, error) {
+	var licenses []*License
+
+	cursor, err := licenseCollection.Find(context.Background(), bson.M{})
+	if err != nil {
+		log.Println("Error retrieving licenses:", err)
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var license License
+		if err := cursor.Decode(&license); err != nil {
+			log.Println("Error decoding license:", err)
+			continue
+		}
+		licenses = append(licenses, &license)
+	}
+
+	if err := cursor.Err(); err != nil {
+		log.Println("Error iterating through licenses:", err)
+		return nil, err
+	}
+
+	return licenses, nil
+}
+
+// GetAllVehicles retrieves all registered vehicles from the database
+func GetAllVehicles() ([]*RegisterVehicle, error) {
+	var vehicles []*RegisterVehicle
+
+	cursor, err := carCollection.Find(context.Background(), bson.M{})
+	if err != nil {
+		log.Println("Error retrieving vehicles:", err)
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var vehicle RegisterVehicle
+		if err := cursor.Decode(&vehicle); err != nil {
+			log.Println("Error decoding vehicle:", err)
+			continue
+		}
+		vehicles = append(vehicles, &vehicle)
+	}
+
+	if err := cursor.Err(); err != nil {
+		log.Println("Error iterating through vehicles:", err)
+		return nil, err
+	}
+
+	return vehicles, nil
+}
