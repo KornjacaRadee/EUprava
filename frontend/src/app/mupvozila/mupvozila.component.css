@@ -1,0 +1,51 @@
+.wrapper {
+    margin-top: 50px;
+  }
+  
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .primary-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+  }
+  
+  .success-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+  }
+  
+  .marginbtn {
+    margin-right: 10px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .label {
+    font-weight: bold;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+  }
+  
+  .form {
+    margin-top: 20px;
+  }
+  

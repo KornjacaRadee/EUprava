@@ -26,12 +26,20 @@ export class ConfigService {
   _get_user_hearing: string;
   _get_hearing: string;
 
+  _mup_vozila_url: string ;
+  _create_licences: string ;
+  _create_vehicles: string ;
+  _getAllLicences: string ;
+  _getAllVehicles: string ;
+  getLicenceById: string ; 
+  getVehicleById: string ;
 
 
   constructor() {
     this._api_url = 'http://localhost';
     this._auth_url =this._api_url + ':8082';
     this._court_url =this._api_url + ':8083';
+    this._mup_vozila_url=this._api_url + ':8081';
 
 //AUTH ROUTES
 
@@ -53,7 +61,14 @@ export class ConfigService {
     this._get_user_hearing = this._court_url + '/hearings/user/';
     this._get_hearing = this._court_url + '/hearings/';
 
+// MUP VOZILA ROUTES
 
+    this._create_licences = this._mup_vozila_url + '/licenses';
+    this._create_vehicles = this._mup_vozila_url + '/vehicles';
+    this._getAllLicences = this._mup_vozila_url + '/getAllLicenses';
+    this._getAllVehicles = this._mup_vozila_url + '/getAllVehicles';
+    this.getLicenceById = this._mup_vozila_url + '/getLicenseById/user';
+    this.getVehicleById = this._mup_vozila_url + '/getVehicleById/user';
 
 
 

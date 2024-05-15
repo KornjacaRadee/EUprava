@@ -5,6 +5,8 @@ import { LoginComponent } from './login/login.component';
 import { CourtHomeComponent } from './court-home/court-home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-etitities.component';
+import { MupvozilaComponent } from './mupvozila/mupvozila.component';
+import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
 const routes: Routes = [
   {
     path: '',
@@ -31,6 +33,14 @@ const routes: Routes = [
     path: 'create-law-etitities',
     component: CreateLawEtititiesComponent,
   },
+  {
+    path: 'mupvozila',
+    component: MupvozilaComponent,
+  },
+  {
+    path: 'mupvozila-home',
+    component: MupvozilaHomeComponent,
+  }
 
 
 ];

@@ -13,6 +13,8 @@ import { CourtHomeComponent } from './court-home/court-home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-etitities.component';
+import { MupvozilaComponent } from './mupvozila/mupvozila.component';
+import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-e
     LoginComponent,
     CourtHomeComponent,
     NavbarComponent,
-    CreateLawEtititiesComponent
+    CreateLawEtititiesComponent,
+    MupvozilaComponent,
+    MupvozilaHomeComponent
 
   ],
   imports: [

@@ -1,0 +1,47 @@
+<div class="wrapper">
+    <div>
+        <h2>Vehicles</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Issuing Date</th>
+                    <th scope="col">Valid Until Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let vehicle of vehicles; let i = index">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ vehicle.name }}</td>
+                    <td>{{ vehicle.issuingDate }}</td>
+                    <td>{{ vehicle.validUntilDate }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h2>Licenses</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Expiration Date</th>
+                    <th scope="col">Issued By</th>
+                    <th scope="col">Vehicle ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let license of licenses; let i = index">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ license.type }}</td>
+                    <td>{{ license.expirationDate }}</td>
+                    <td>{{ license.issuedBy }}</td>
+                    <td>{{ license.vehicleId }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
