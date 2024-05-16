@@ -30,10 +30,10 @@ export class MupvozilaService {
   }
 
   getLicenseById(id: string): Observable<any> {
-    return this.http.get(`${this.configService.getLicenceById}` + id);
+    return this.http.get(`${this.configService._getLicenceById}` + id);
   }
 
   getVehicleById(id: string): Observable<any> {
-    return this.http.get(`${this.configService.getVehicleById}` + id);
+    return this.http.get(`${this.configService._getVehicleById}` + id);
   }
 }

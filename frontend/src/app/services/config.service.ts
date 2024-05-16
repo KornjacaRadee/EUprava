@@ -31,8 +31,8 @@ export class ConfigService {
   _create_vehicles: string ;
   _getAllLicences: string ;
   _getAllVehicles: string ;
-  getLicenceById: string ; 
-  getVehicleById: string ;
+  _getLicenceById: string ; 
+  _getVehicleById: string ;
 
 
   constructor() {
@@ -67,8 +67,8 @@ export class ConfigService {
     this._create_vehicles = this._mup_vozila_url + '/vehicles';
     this._getAllLicences = this._mup_vozila_url + '/getAllLicenses';
     this._getAllVehicles = this._mup_vozila_url + '/getAllVehicles';
-    this.getLicenceById = this._mup_vozila_url + '/getLicenseById/user';
-    this.getVehicleById = this._mup_vozila_url + '/getVehicleById/user';
+    this._getLicenceById = this._mup_vozila_url + '/getLicenseById/user/';
+    this._getVehicleById = this._mup_vozila_url + '/getVehicleById/user/';
 
 
 
