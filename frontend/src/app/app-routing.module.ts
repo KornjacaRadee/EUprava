@@ -41,8 +41,10 @@ const routes: Routes = [
   {
 
     path: 'traffic-police',
-    component: TrafficPoliceComponent
+    component: TrafficPoliceComponent,
 
+  },
+  {
     path: 'mupvozila',
     component: MupvozilaComponent,
   },
