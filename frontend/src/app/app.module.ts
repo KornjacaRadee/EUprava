@@ -13,6 +13,11 @@ import { CourtHomeComponent } from './court-home/court-home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-etitities.component';
+import { TrafficPoliceComponent } from './traffic-police.service/traffic-police.service.component';
+
+
+
+
 
 @NgModule({
   declarations: [
@@ -21,8 +26,13 @@ import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-e
     LoginComponent,
     CourtHomeComponent,
     NavbarComponent,
-    CreateLawEtititiesComponent
-
+    CreateLawEtititiesComponent,
+    TrafficPoliceComponent,
+    
+    
+    
+    
+    
   ],
   imports: [
     BrowserModule,

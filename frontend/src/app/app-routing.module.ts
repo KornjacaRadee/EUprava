@@ -5,6 +5,8 @@ import { LoginComponent } from './login/login.component';
 import { CourtHomeComponent } from './court-home/court-home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-etitities.component';
+import { TrafficPoliceComponent } from './traffic-police.service/traffic-police.service.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -31,6 +33,10 @@ const routes: Routes = [
     path: 'create-law-etitities',
     component: CreateLawEtititiesComponent,
   },
+  {
+    path: 'traffic-police',
+    component: TrafficPoliceComponent
+  }
 
 
 ];

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -18,6 +19,11 @@ import (
 func main() {
 	// Inicijalizacija logera
 	logger := log.New(os.Stdout, "[saobracajna-policija] ", log.LstdFlags)
+
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "8084"
+	}
 
 	// Inicijalizacija MongoDB klijenta
 	mongoClient, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
@@ -41,6 +47,8 @@ func main() {
 	// Inicijalizacija rutera
 	router := mux.NewRouter()
 
+	//router.Use(CORSMiddleware)
+
 	// Rute za rukovanje nesrećama
 	router.HandleFunc("/nesreca/new", handler.CreateNesreca).Methods(http.MethodPost)
 
@@ -54,10 +62,16 @@ func main() {
 	router.HandleFunc("/nesreca/{id}", handler.DeleteNesreca).Methods(http.MethodDelete)
 	router.HandleFunc("/prekrsaj/{id}", handler.DeletePrekrsaj).Methods(http.MethodDelete)
 
-	// Kreiranje HTTP servera
+	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
+	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"})
+	origins := handlers.AllowedOrigins([]string{"http://localhost:4200"}) // Update with your Angular app's origin
+
+	handlerWithCORS := handlers.CORS(headers, methods, origins)(router)
+
+	http.Handle("/", handlerWithCORS)
 	server := &http.Server{
-		Addr:         ":8084",
-		Handler:      router,
+		Addr:         ":" + port,
+		Handler:      handlerWithCORS,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  120 * time.Second,
