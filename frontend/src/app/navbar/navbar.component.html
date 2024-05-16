@@ -4,7 +4,11 @@
   <ul class="navbar-nav">
     <li class="nav-item">
       <a class="nav-link home-link" *ngIf="signed()" routerLink="/court-home">My Legal Entities</a>
+      
     </li>
+    <a class="nav-link home-link" *ngIf="signed()" routerLink="/traffic-police">Traffic-police</a>
+   
+    
     <li class="nav-item">
       <a *ngIf="isCourtWorker()" routerLink="/create-law-etitities" class="nav-link logout-link" style="cursor:pointer;">Create new legal entity</a>
     </li>
