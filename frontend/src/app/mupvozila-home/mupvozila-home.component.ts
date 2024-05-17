@@ -23,21 +23,21 @@ export class MupvozilaHomeComponent implements OnInit {
 
   getUserVehicles() {
     let id = this.authService.getUserId();
-    this.mupvozilaService.getVehicleById(id).subscribe((data: any) => {
+    this.mupvozilaService.getAllVehicles().subscribe((data: any) => {
       this.vehicles = data;
     });
   }
 
   getUserRegistrations() {
     let id = this.authService.getUserId();
-    this.mupvozilaService.getVehicleById(id).subscribe((data: any) => {
+    this.mupvozilaService.getAllVehicles().subscribe((data: any) => {
       this.registrations = data;
     });
   }
 
   getUserLicenses() {
     let id = this.authService.getUserId();
-    this.mupvozilaService.getLicenseById(id).subscribe((data: any) => {
+    this.mupvozilaService.getAllLicenses().subscribe((data: any) => {
       this.licenses = data;
     });
   }

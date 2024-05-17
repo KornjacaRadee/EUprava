@@ -15,8 +15,8 @@
           <tr *ngFor="let registration of registrations; let i = index">
             <th scope="row">{{ i + 1 }}</th>
             <td>{{ registration.name }}</td>
-            <td>{{ registration.issueDate }}</td>
-            <td>{{ registration.dueToDate }}</td>
+            <td>{{ registration.issuing_date }}</td>
+            <td>{{ registration.valid_until_date }}</td>
           </tr>
         </tbody>
       </table>
@@ -40,11 +40,11 @@
           <tr *ngFor="let licence of licenses; let i = index">
             <th scope="row">{{ i + 1 }}</th>
             <td>{{ licence.category }}</td>
-            <td>{{ licence.issueDate }}</td>
-            <td>{{ licence.dueToDate}}</td>
+            <td>{{ licence.issuing_date }}</td>
+            <td>{{ licence.valid_until_date}}</td>
             <td>{{ licence.address }}</td>
             <td>{{ licence.points }}</td>
-            <td>{{ licence.isValid}}</td>
+            <td>{{ licence.is_valid}}</td>
           </tr>
         </tbody>
       </table>

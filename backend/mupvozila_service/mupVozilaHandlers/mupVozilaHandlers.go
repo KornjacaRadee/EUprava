@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"mupvozila_service/data"
 	"net/http"
 )
@@ -111,4 +112,26 @@ func GetVehicleByIDHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Respond with the retrieved vehicle
 	json.NewEncoder(w).Encode(vehicle)
+}
+
+func GetLicencesByUserID(dbClient *mongo.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		log.Println("a daj brate")
+		log.Println("This is id: ", mux.Vars(r)["id"])
+
+		userID, err := primitive.ObjectIDFromHex(mux.Vars(r)["id"])
+		log.Println("This is id in object: ", userID)
+		if err != nil {
+			http.Error(w, "Invalid userID", http.StatusBadRequest)
+			return
+		}
+
+		licences, err := data.GetLicencesByUserID(dbClient, userID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(licences)
+	}
 }

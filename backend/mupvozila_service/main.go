@@ -49,6 +49,7 @@ func main() {
 	r.HandleFunc("/getAllVehicles", mupVozilaHandlers.GetAllVehiclesHandler).Methods("GET")
 	r.HandleFunc("/getLicenseById/{id}", mupVozilaHandlers.GetLicenseByIDHandler).Methods("GET")
 	r.HandleFunc("/getVehicleById/{id}", mupVozilaHandlers.GetVehicleByIDHandler).Methods("GET")
+	r.HandleFunc("/getLicencesByUserID/user/{id}", mupVozilaHandlers.GetLicencesByUserID(dbClient)).Methods("GET")
 
 	// CORS setup
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
