@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class CreateLawEtititiesComponent implements OnInit{
   selectedForm: string = '';
   entity: any = { title: '', description: '', issueDate: '', dueToDate: '', userId: '' };
-  warrant: any = { title: '', description: '', issueDate: '', dueToDate: '', userId: '', address: '' };
+  warrant: any = { title: '', description: '', issueDate: '', dueToDate: '', jmbg: '', address: '' };
   hearing: any = { title: '', description: '', scheduledAt: '', duration: 0, legalEntityId: '' };
 
   constructor(private courtService: CourtService, private authService: AuthService,private router: Router) { }

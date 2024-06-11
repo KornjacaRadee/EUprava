@@ -22,7 +22,16 @@ type CreateLegalEntityRequest struct {
 	IssueDate   time.Time          `bson:"issueDate" json:"issueDate"`
 	DueToDate   time.Time          `bson:"dueToDate" json:"dueToDate"`
 	JMBG        string             `json:"jmbg"`
-	// other fields
+}
+
+type SearchWarrantRequest struct {
+	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Title       string             `bson:"title" json:"title"`
+	Description string             `bson:"description" json:"description"`
+	IssueDate   time.Time          `bson:"issueDate" json:"issueDate"`
+	DueToDate   time.Time          `bson:"dueToDate" json:"dueToDate"`
+	JMBG        string             `json:"jmbg"`
+	Address     string             `bson:"address" json:"address"`
 }
 
 func CreateLegalEntity(dbClient *mongo.Client, authClient *client.AuthClient) http.HandlerFunc {
@@ -141,15 +150,27 @@ func DeleteLegalEntity(dbClient *mongo.Client) http.HandlerFunc {
 	}
 }
 
-func CreateHouseSearchWarrant(dbClient *mongo.Client) http.HandlerFunc {
+func CreateHouseSearchWarrant(dbClient *mongo.Client, authClient *client.AuthClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var warrant data.HouseSearchWarrant
-		if err := json.NewDecoder(r.Body).Decode(&warrant); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+		var req CreateLegalEntityRequest
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, "Invalid request payload", http.StatusBadRequest)
+			return
+		}
+		user, err := authClient.GetUserByJMBG(context.Background(), req.JMBG)
+		if err != nil {
+			http.Error(w, "User not found", http.StatusNotFound)
 			return
 		}
 
-		err := data.CreateHouseSearchWarrant(dbClient, &warrant)
+		warrant.Title = req.Title
+		warrant.Description = req.Description
+		warrant.IssueDate = req.IssueDate
+		warrant.DueToDate = req.DueToDate
+		warrant.UserID = user.ID
+
+		err = data.CreateHouseSearchWarrant(dbClient, &warrant)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
