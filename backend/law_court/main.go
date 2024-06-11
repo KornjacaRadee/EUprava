@@ -65,7 +65,7 @@ func main() {
 	r.HandleFunc("/legal_entities/user/{id}", court_handlers.GetLegalEntitiesByUserID(dbClient)).Methods("GET")
 	r.HandleFunc("/legal_entities/{id}", court_handlers.UpdateLegalEntity(dbClient)).Methods("PUT")
 	r.HandleFunc("/legal_entities/{id}", court_handlers.DeleteLegalEntity(dbClient)).Methods("DELETE")
-	r.HandleFunc("/house_search_warrants", court_handlers.CreateHouseSearchWarrant(dbClient)).Methods("POST")
+	r.HandleFunc("/house_search_warrants", court_handlers.CreateHouseSearchWarrant(dbClient, auth)).Methods("POST")
 	r.HandleFunc("/house_search_warrants/{id}", court_handlers.GetHouseSearchWarrant(dbClient)).Methods("GET")
 	r.HandleFunc("/house_search_warrants/user/{id}", court_handlers.GetHouseSearchWarrantsByUserID(dbClient)).Methods("GET")
 	r.HandleFunc("/house_search_warrants/{id}", court_handlers.UpdateHouseSearchWarrant(dbClient)).Methods("PUT")
