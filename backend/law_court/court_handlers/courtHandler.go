@@ -1,10 +1,13 @@
 package court_handlers
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"law_court/client"
 	"log"
 	"net/http"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -12,15 +15,36 @@ import (
 	"law_court/data"
 )
 
-func CreateLegalEntity(dbClient *mongo.Client) http.HandlerFunc {
+type CreateLegalEntityRequest struct {
+	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Title       string             `bson:"title" json:"title"`
+	Description string             `bson:"description" json:"description"`
+	IssueDate   time.Time          `bson:"issueDate" json:"issueDate"`
+	DueToDate   time.Time          `bson:"dueToDate" json:"dueToDate"`
+	JMBG        string             `json:"jmbg"`
+	// other fields
+}
+
+func CreateLegalEntity(dbClient *mongo.Client, authClient *client.AuthClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var legalEntity data.LegalEntity
-		if err := json.NewDecoder(r.Body).Decode(&legalEntity); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+		var req CreateLegalEntityRequest
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, "Invalid request payload", http.StatusBadRequest)
 			return
 		}
+		user, err := authClient.GetUserByJMBG(context.Background(), req.JMBG)
+		if err != nil {
+			http.Error(w, "User not found", http.StatusNotFound)
+			return
+		}
+		legalEntity.Title = req.Title
+		legalEntity.Description = req.Description
+		legalEntity.IssueDate = req.IssueDate
+		legalEntity.DueToDate = req.DueToDate
+		legalEntity.UserID = user.ID
 
-		err := data.CreateLegalEntity(dbClient, &legalEntity)
+		err = data.CreateLegalEntity(dbClient, &legalEntity)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

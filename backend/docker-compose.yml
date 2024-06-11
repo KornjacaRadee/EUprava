@@ -1,7 +1,21 @@
 version: "3.1"
 
 services:
-
+  api_gateway:
+    build:
+      context: ./api_gateway/
+      dockerfile: Dockerfile
+    container_name: api_gateway
+    restart: on-failure
+    ports:
+      - 8000:8000
+    depends_on:
+      - saobracajna_policija
+      - auth_service
+      - law_court
+      - statistika_service
+    networks:
+      - network
 
   saobracajna_policija:
       build:

@@ -49,7 +49,7 @@ export class CreateLawEtititiesComponent implements OnInit{
     this.courtService.createEntity(formattedEntity).subscribe(response => {
       console.log('Legal Entity Created:', response);
       // Reset form
-      this.entity = { title: '', description: '', issueDate: '', dueToDate: '', userId: '' };
+      this.entity = { title: '', description: '', issueDate: '', dueToDate: '', jmbg: '' };
       this.selectedForm = '';
     });
   }

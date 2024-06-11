@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
       },
       (response) => {
         console.error('Login failed', response.error);
-        if (response.error && response.error.includes('502')) {
+        if (response.error) {
           this.errorMessage = 'Service not available';
           this.toastr.error('Service not available');
         } else {

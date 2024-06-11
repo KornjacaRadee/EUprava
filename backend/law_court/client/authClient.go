@@ -22,7 +22,6 @@ func NewAuthClient(client *http.Client, baseURL string) *AuthClient {
 }
 
 func (c *AuthClient) GetUserByID(ctx context.Context, userID string) (*User, error) {
-	// Make the HTTP request to the auth service
 	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s/users/%s", c.baseURL, userID), nil)
 	if err != nil {
 		return nil, err
@@ -35,11 +34,33 @@ func (c *AuthClient) GetUserByID(ctx context.Context, userID string) (*User, err
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		// Handle error response
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	// Decode JSON response
+	var user User
+	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (c *AuthClient) GetUserByJMBG(ctx context.Context, jmbg string) (*User, error) {
+	req, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf("%s/users/jmbg/%s", c.baseURL, jmbg), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
 	var user User
 	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
 		return nil, err
