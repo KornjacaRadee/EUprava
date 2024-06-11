@@ -29,8 +29,8 @@
       <input type="datetime-local" class="form-control" id="entityDueToDate" [(ngModel)]="entity.dueToDate" name="dueToDate" required>
     </div>
     <div class="form-group">
-      <label for="entityUserId">Korisnicki ID</label>
-      <input type="text" class="form-control" id="entityUserId" [(ngModel)]="entity.userId" name="userId" required>
+      <label for="entityUserId">JMBG Korisnika</label>
+      <input type="text" class="form-control" id="entityUserId" [(ngModel)]="entity.jmbg" name="userId" required>
     </div>
     <button type="submit" class="btn btn-success marginbtn">Kreiraj legalni entitet</button>
   </form>
@@ -59,7 +59,7 @@
     </div>
     <div class="form-group">
       <label for="warrantUserId">Korisnicki ID</label>
-      <input type="text" class="form-control" id="warrantUserId" [(ngModel)]="warrant.userId" name="userId" required>
+      <input type="text" class="form-control" id="warrantUserId" [(ngModel)]="warrant.jmbg" name="userId" required>
     </div>
     <button type="submit" class="btn btn-success marginbtn">Napravi Nalog</button>
   </form>

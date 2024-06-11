@@ -54,9 +54,17 @@ func RegisterUser(client *mongo.Client, user *User) error {
 	return err
 }
 
-// data/user.go
+func GetUserByJMBG(client *mongo.Client, jmbg string) (*User, error) {
+	userCollection := client.Database("authDB").Collection("users")
 
-// ...
+	var user User
+	err := userCollection.FindOne(context.TODO(), bson.D{{"jmbg", jmbg}}).Decode(&user)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
 
 func GetUserByID(client *mongo.Client, userID primitive.ObjectID) (*User, error) {
 	userCollection := client.Database("authDB").Collection("users")

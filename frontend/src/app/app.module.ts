@@ -14,6 +14,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-etitities.component';
 
+import { TrafficPoliceComponent } from './traffic-police.service/traffic-police.service.component';
+
+
+
+
+
+import { MupvozilaComponent } from './mupvozila/mupvozila.component';
+import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +31,18 @@ import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-e
     LoginComponent,
     CourtHomeComponent,
     NavbarComponent,
-    CreateLawEtititiesComponent
+    CreateLawEtititiesComponent,
+
+    TrafficPoliceComponent,
+    
+    
+    
+    
+    
+
+    MupvozilaComponent,
+    MupvozilaHomeComponent
+
 
   ],
   imports: [

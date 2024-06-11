@@ -1,0 +1,98 @@
+<!-- traffic-police.component.html -->
+<div class="container mt-4">
+  <div class="row">
+    <<h2>Kreiranje Nesreće</h2>
+    <form (ngSubmit)="createNesreca()">
+      <div class="form-group">
+        <label for="nesrecaLocation">Lokacija:</label>
+        <input type="text" class="form-control" id="nesrecaLocation" [(ngModel)]="nesrecaData.lokacija" name="lokacija" required>
+      </div>
+      <div class="form-group">
+        <label for="nesrecaVehicle">Vozilo:</label>
+        <input type="text" class="form-control" id="nesrecaVehicle" [(ngModel)]="nesrecaData.vozac" name="vozac" required>
+      </div>
+      <div class="form-group">
+        <label for="nesrecaDriver">Vozac:</label>
+        <input type="text" class="form-control" id="nesrecaDriver" [(ngModel)]="nesrecaData.vozilo" name="vozilo" required>
+      </div>
+      <div class="form-group">
+        <label for="prekrsajDescription">Opis:</label>
+        <input type="text" class="form-control" id="prekrsajDescription" [(ngModel)]="nesrecaData.opis" name="opis" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Kreiraj Nesreću</button>
+    </form>
+
+<h2>Kreiranje Prekršaja</h2>
+    <form (ngSubmit)="createPrekrsaj()">
+      <div class="form-group">
+        <label for="prekrsajType">Tip Prekršaja:</label>
+        <input type="text" class="form-control" id="prekrsajType" [(ngModel)]="prekrsajData.lokacija" name="lokacija" required>
+      </div>
+      <div class="form-group">
+        <label for="prekrsajLocation">Lokacija:</label>
+        <input type="text" class="form-control" id="prekrsajLocation" [(ngModel)]="prekrsajData.vozac" name="vozac" required>
+      </div>
+      <div class="form-group">
+        <label for="prekrsajDescription">Opis:</label>
+        <input type="text" class="form-control" id="prekrsajDescription" [(ngModel)]="prekrsajData.vozilo" name="vozilo" required>
+      </div>
+      <div class="form-group">
+        <label for="prekrsajDescription">Opis:</label>
+        <input type="text" class="form-control" id="prekrsajDescription" [(ngModel)]="prekrsajData.opis" name="opis" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Kreiraj Prekršaj</button>
+    </form>
+  </div>
+  <div class="col">
+  </div>
+
+  <!-- Table for displaying prekršaji -->
+  <div class="row mt-4">
+    <div class="col">
+      <h2>Prekršaji</h2>
+      <table class="table">
+        <!-- Table headers -->
+        <tr>
+          <th>Lokacija</th>
+          <th>Vozac</th>
+          <th>Vozilo</th>
+          <th>Opis</th>
+          
+        </tr>
+        <!-- Table rows -->
+        <tr *ngFor="let prekrsaj of prekrsaji">
+          <td>{{ prekrsaj.lokacija }}</td>
+          <td>{{ prekrsaj.vozac }}</td>
+          <td>{{ prekrsaj.vozilo }}</td>
+          <td>{{ prekrsaj.opis }}</td>
+          <td><button (click)="deletePrekrsaj(prekrsaj.id)">Delete</button></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Table for displaying nesreće -->
+  <div class="row mt-4">
+    <div class="col">
+      <h2>Nesreće</h2>
+      <table class="table">
+        <!-- Table headers -->
+        <tr>
+          <th>Lokacija</th>
+          <th>Vozac</th>
+          <th>Vozilo</th>
+          <th>Opis</th>
+          
+        </tr>
+        <!-- Table rows -->
+        <tr *ngFor="let nesreca of nesrece">
+          <td>{{ nesreca.lokacija }}</td>
+          <td>{{ nesreca.vozac }}</td>
+          <td>{{ nesreca.vozilo }}</td>
+          <td>{{ nesreca.opis }}</td>
+          <td><button (click)="deleteNesreca(nesreca.id)">Delete</button></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

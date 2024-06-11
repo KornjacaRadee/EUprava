@@ -34,14 +34,7 @@ func main() {
 	if len(port) == 0 {
 		port = "8082"
 	}
-	authClient := &http.Client{
-		Transport: &http.Transport{
-			MaxIdleConns:        10,
-			MaxIdleConnsPerHost: 10,
-			MaxConnsPerHost:     10,
-		},
-	}
-	auth := client.NewAuthClient(authClient, "http://auth_service:8082")
+	auth := client.NewAuthClient(&http.Client{}, "http://auth_service:8082")
 	r := mux.NewRouter()
 	r.HandleFunc("/get_user", func(w http.ResponseWriter, r *http.Request) {
 
@@ -67,12 +60,12 @@ func main() {
 			log.Println("Error writing response:", err)
 		}
 	})
-	r.HandleFunc("/legal_entities", court_handlers.CreateLegalEntity(dbClient)).Methods("POST")
+	r.HandleFunc("/legal_entities", court_handlers.CreateLegalEntity(dbClient, auth)).Methods("POST")
 	r.HandleFunc("/legal_entities/{id}", court_handlers.GetLegalEntity(dbClient)).Methods("GET")
 	r.HandleFunc("/legal_entities/user/{id}", court_handlers.GetLegalEntitiesByUserID(dbClient)).Methods("GET")
 	r.HandleFunc("/legal_entities/{id}", court_handlers.UpdateLegalEntity(dbClient)).Methods("PUT")
 	r.HandleFunc("/legal_entities/{id}", court_handlers.DeleteLegalEntity(dbClient)).Methods("DELETE")
-	r.HandleFunc("/house_search_warrants", court_handlers.CreateHouseSearchWarrant(dbClient)).Methods("POST")
+	r.HandleFunc("/house_search_warrants", court_handlers.CreateHouseSearchWarrant(dbClient, auth)).Methods("POST")
 	r.HandleFunc("/house_search_warrants/{id}", court_handlers.GetHouseSearchWarrant(dbClient)).Methods("GET")
 	r.HandleFunc("/house_search_warrants/user/{id}", court_handlers.GetHouseSearchWarrantsByUserID(dbClient)).Methods("GET")
 	r.HandleFunc("/house_search_warrants/{id}", court_handlers.UpdateHouseSearchWarrant(dbClient)).Methods("PUT")

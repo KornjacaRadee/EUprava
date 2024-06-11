@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class CreateLawEtititiesComponent implements OnInit{
   selectedForm: string = '';
   entity: any = { title: '', description: '', issueDate: '', dueToDate: '', userId: '' };
-  warrant: any = { title: '', description: '', issueDate: '', dueToDate: '', userId: '', address: '' };
+  warrant: any = { title: '', description: '', issueDate: '', dueToDate: '', jmbg: '', address: '' };
   hearing: any = { title: '', description: '', scheduledAt: '', duration: 0, legalEntityId: '' };
 
   constructor(private courtService: CourtService, private authService: AuthService,private router: Router) { }
@@ -49,7 +49,7 @@ export class CreateLawEtititiesComponent implements OnInit{
     this.courtService.createEntity(formattedEntity).subscribe(response => {
       console.log('Legal Entity Created:', response);
       // Reset form
-      this.entity = { title: '', description: '', issueDate: '', dueToDate: '', userId: '' };
+      this.entity = { title: '', description: '', issueDate: '', dueToDate: '', jmbg: '' };
       this.selectedForm = '';
     });
   }

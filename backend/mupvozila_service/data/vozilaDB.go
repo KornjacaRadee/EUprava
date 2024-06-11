@@ -118,3 +118,24 @@ func GetAllVehicles() ([]*RegisterVehicle, error) {
 
 	return vehicles, nil
 }
+
+func GetLicencesByUserID(dbClient *mongo.Client, userID primitive.ObjectID) ([]License, error) {
+	licenseCollection := dbClient.Database("mupvozila_db").Collection("licences")
+
+	var licences []License
+	cursor, err := licenseCollection.Find(context.Background(), bson.M{"userId": userID})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var license License
+		if err := cursor.Decode(&license); err != nil {
+			return nil, err
+		}
+		licences = append(licences, license)
+	}
+
+	return licences, nil
+}

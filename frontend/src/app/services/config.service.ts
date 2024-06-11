@@ -27,17 +27,42 @@ export class ConfigService {
   _get_hearing: string;
 
 
+  _create_prekrsaj: string;
+  _get_prekrsaj: string;
+  _delete_prekrsaj: string;
+
+  _mup_vozila_url: string ;
+  _create_licences: string ;
+  _create_vehicles: string ;
+  _getAllLicences: string ;
+  _getAllVehicles: string ;
+  _getLicenceById: string ;
+  _getVehicleById: string ;
+
+
+  _create_nesreca: string;
+  _get_nesreca: string;
+  _delete_nesreca: string;
+  _court_urll: string;
+
+
+
 
   constructor() {
     this._api_url = 'http://localhost';
-    this._auth_url =this._api_url + ':8082';
-    this._court_url =this._api_url + ':8083';
+    this._auth_url =this._api_url + ':8000';
+    this._court_url =this._api_url + ':8000/api/law_court';
+
+    this._court_urll = this._api_url + ':8084';
+
+    this._mup_vozila_url=this._api_url + ':8081';
+
 
 //AUTH ROUTES
 
-    this._register_url = this._auth_url + '/register';
+    this._register_url = this._auth_url + '/api/auth/register';
 
-    this._login_url = this._auth_url + '/login';
+    this._login_url = this._auth_url + '/api/auth/login';
 
 //COURT ROUTES
 
@@ -54,6 +79,24 @@ export class ConfigService {
     this._get_hearing = this._court_url + '/hearings/';
 
 
+    this._create_prekrsaj = this._court_urll + '/prekrsaj/new';
+    this._delete_prekrsaj = this._court_urll + '/prekrsaj/'
+    this._get_prekrsaj = this._court_urll + '/prekrsaj';
+
+    this._create_nesreca = this._court_urll + '/nesreca/new';
+    this._delete_nesreca = this._court_urll + '/nesreca/'
+    this._get_nesreca = this._court_urll + '/nesreca';
+
+
+// MUP VOZILA ROUTES
+
+
+    this._create_licences = this._mup_vozila_url + '/licenses';
+    this._create_vehicles = this._mup_vozila_url + '/vehicles';
+    this._getAllLicences = this._mup_vozila_url + '/getAllLicenses';
+    this._getAllVehicles = this._mup_vozila_url + '/getAllVehicles';
+    this._getLicenceById = this._mup_vozila_url + '/getLicenseById/user/';
+    this._getVehicleById = this._mup_vozila_url + '/getVehicleById/user/';
 
 
 

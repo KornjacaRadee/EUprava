@@ -55,6 +55,7 @@ func HandleRegister(dbClient *mongo.Client) http.HandlerFunc {
 		}
 		newUser.Password = hashedPassword
 		newUser.Role = "user"
+		//newUser.Role = "mupWorker"
 
 		// Register the user
 		newUser.ID = primitive.NewObjectID()
@@ -64,6 +65,31 @@ func HandleRegister(dbClient *mongo.Client) http.HandlerFunc {
 		}
 
 		w.WriteHeader(http.StatusCreated)
+	}
+}
+
+// In authHandlers/handlers.go
+
+func HandleGetUserByJMBG(dbClient *mongo.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Extract JMBG from URL parameters
+		vars := mux.Vars(r)
+		jmbg := vars["jmbg"]
+
+		// Get user by JMBG
+		user, err := data.GetUserByJMBG(dbClient, jmbg)
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				http.Error(w, "User not found", http.StatusNotFound)
+			} else {
+				http.Error(w, "Error retrieving user", http.StatusInternalServerError)
+			}
+			return
+		}
+
+		// Return user data
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(user)
 	}
 }
 

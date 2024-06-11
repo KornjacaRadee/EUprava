@@ -1,0 +1,53 @@
+<!-- court-home.component.html -->
+<div class="wrapper">
+    <div>
+      <h2>Registracije Automobila</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ime Vozaca</th>
+            <th scope="col">Datum Izdavanja</th>
+            <th scope="col">Vazi do</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let registration of registrations; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ registration.name }}</td>
+            <td>{{ registration.issuing_date }}</td>
+            <td>{{ registration.valid_until_date }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div>
+      <h2>Vozacke Dozvole</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Kategorija</th>
+            <th scope="col">Datum Izdavanja</th>
+            <th scope="col">Vazi do</th>
+            <th scope="col">Adresa</th>
+            <th scope="col">Poeni</th>
+            <th scope="col">je Vazeca</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let licence of licenses; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ licence.category }}</td>
+            <td>{{ licence.issuing_date }}</td>
+            <td>{{ licence.valid_until_date}}</td>
+            <td>{{ licence.address }}</td>
+            <td>{{ licence.points }}</td>
+            <td>{{ licence.is_valid}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    
