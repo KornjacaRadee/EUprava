@@ -25,15 +25,15 @@
 <h2>Kreiranje Prekršaja</h2>
     <form (ngSubmit)="createPrekrsaj()">
       <div class="form-group">
-        <label for="prekrsajType">Tip Prekršaja:</label>
+        <label for="prekrsajType">Lokacija:</label>
         <input type="text" class="form-control" id="prekrsajType" [(ngModel)]="prekrsajData.lokacija" name="lokacija" required>
       </div>
       <div class="form-group">
-        <label for="prekrsajLocation">Lokacija:</label>
+        <label for="prekrsajLocation">Vozilo:</label>
         <input type="text" class="form-control" id="prekrsajLocation" [(ngModel)]="prekrsajData.vozac" name="vozac" required>
       </div>
       <div class="form-group">
-        <label for="prekrsajDescription">Opis:</label>
+        <label for="prekrsajDescription">Vozac:</label>
         <input type="text" class="form-control" id="prekrsajDescription" [(ngModel)]="prekrsajData.vozilo" name="vozilo" required>
       </div>
       <div class="form-group">
