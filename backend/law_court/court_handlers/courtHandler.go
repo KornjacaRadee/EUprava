@@ -18,6 +18,8 @@ import (
 type CreateLegalEntityRequest struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	Title       string             `bson:"title" json:"title"`
+	Licence     bool               `bson:"licence" json:"licence"`
+	Category    string             `bson:"category" json:"category"`
 	Description string             `bson:"description" json:"description"`
 	IssueDate   time.Time          `bson:"issueDate" json:"issueDate"`
 	DueToDate   time.Time          `bson:"dueToDate" json:"dueToDate"`
@@ -34,32 +36,45 @@ type SearchWarrantRequest struct {
 	Address     string             `bson:"address" json:"address"`
 }
 
-func CreateLegalEntity(dbClient *mongo.Client, authClient *client.AuthClient) http.HandlerFunc {
+func CreateLegalEntity(dbClient *mongo.Client, authClient *client.AuthClient, mupvozilaClient *client.MupvozilaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var legalEntity data.LegalEntity
 		var req CreateLegalEntityRequest
 		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 			http.Error(w, "Invalid request payload", http.StatusBadRequest)
 			return
 		}
+
 		user, err := authClient.GetUserByJMBG(context.Background(), req.JMBG)
 		if err != nil {
 			http.Error(w, "User not found", http.StatusNotFound)
 			return
 		}
-		legalEntity.Title = req.Title
-		legalEntity.Description = req.Description
-		legalEntity.IssueDate = req.IssueDate
-		legalEntity.DueToDate = req.DueToDate
-		legalEntity.UserID = user.ID
+
+		legalEntity := data.LegalEntity{
+			Title:       req.Title,
+			Description: req.Description,
+			IssueDate:   req.IssueDate,
+			DueToDate:   req.DueToDate,
+			UserID:      user.ID,
+		}
 
 		err = data.CreateLegalEntity(dbClient, &legalEntity)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		json.NewEncoder(w).Encode(legalEntity)
+		// FIKSIRAN USERID DOK KOLEGA NE NAMESTI SVOJ SERVIS!!!!!~
+		if req.Licence {
+			// Update the licence validity
+			err = mupvozilaClient.UpdateLicenceValidity(context.Background(), "000000000000000000000000", req.Category)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+
 		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode(legalEntity)
 	}
 }
 
