@@ -33,6 +33,37 @@ func InsertLicense(license *License) (*mongo.InsertOneResult, error) {
 	}
 	return result, err
 }
+func UpdateLicenseValidityByUserIDAndCategory(userID primitive.ObjectID, category string, isValid bool) (*mongo.UpdateResult, error) {
+	filter := bson.M{"user_id": userID, "category": category}
+
+	// Fetch current values
+	cursor, err := licenseCollection.Find(context.Background(), filter)
+	if err != nil {
+		log.Println("Error finding licenses:", err)
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	log.Println("Current IsValid values for matched licenses:")
+	for cursor.Next(context.Background()) {
+		var license License
+		if err := cursor.Decode(&license); err != nil {
+			log.Println("Error decoding license:", err)
+			continue
+		}
+		log.Printf("License ID: %s, IsValid: %v\n", license.ID.Hex(), license.IsValid)
+	}
+
+	update := bson.M{"$set": bson.M{"is_valid": isValid}}
+
+	result, err := licenseCollection.UpdateMany(context.Background(), filter, update)
+	if err != nil {
+		log.Println("Error updating license validity:", err)
+		return nil, err
+	}
+
+	return result, nil
+}
 
 // InsertVehicle registers a vehicle into the database
 func InsertVehicle(vehicle *RegisterVehicle) (*mongo.InsertOneResult, error) {
