@@ -3,10 +3,14 @@ package court_handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	"law_court/client"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -36,11 +40,68 @@ type SearchWarrantRequest struct {
 	Address     string             `bson:"address" json:"address"`
 }
 
+func CreateLegalRequest(dbClient *mongo.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var legalRequest data.LegalRequest
+		if err := json.NewDecoder(r.Body).Decode(&legalRequest); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		userID := r.Header.Get("UserID")
+
+		userObjID, err := primitive.ObjectIDFromHex(userID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		legalRequest.UserID = userObjID
+		legalRequest.RequestDate = time.Now()
+
+		if err := data.CreateLegalRequest(dbClient, &legalRequest); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusCreated)
+	}
+}
+
+func GetLegalRequestsByUserID(dbClient *mongo.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		params := mux.Vars(r)
+		userID, err := primitive.ObjectIDFromHex(params["id"])
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		legalRequests, err := data.GetLegalRequestsByUserID(dbClient, userID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(legalRequests); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
 func CreateLegalEntity(dbClient *mongo.Client, authClient *client.AuthClient, mupvozilaClient *client.MupvozilaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req CreateLegalEntityRequest
 		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 			http.Error(w, "Invalid request payload", http.StatusBadRequest)
+			return
+		}
+
+		_, err := getRoleFromToken(r)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return
 		}
 
@@ -171,6 +232,12 @@ func CreateHouseSearchWarrant(dbClient *mongo.Client, authClient *client.AuthCli
 		var req CreateLegalEntityRequest
 		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 			http.Error(w, "Invalid request payload", http.StatusBadRequest)
+			return
+		}
+
+		_, err := getRoleFromToken(r)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return
 		}
 		user, err := authClient.GetUserByJMBG(context.Background(), req.JMBG)
@@ -339,4 +406,49 @@ func GetHearingsByUserID(dbClient *mongo.Client) http.HandlerFunc {
 
 		json.NewEncoder(w).Encode(hearings)
 	}
+}
+
+const jwtSecret = "g3HtH5KZNq3KcWglpIc3eOBHcrxChcY/7bTKG8a5cHtjn2GjTqUaMbxR3DBIr+44"
+
+func getRoleFromToken(r *http.Request) (string, error) {
+	// Extract the token from the Authorization header
+	tokenString := r.Header.Get("Authorization")
+	if tokenString == "" {
+		return "", errors.New("missing Authorization header")
+	}
+
+	// Remove 'Bearer ' prefix if present
+	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Check the signing method
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+
+		// Provide the secret key used to sign the token
+		return []byte(jwtSecret), nil
+	})
+	if err != nil {
+		return "", fmt.Errorf("Invalid token: %v", err)
+	}
+
+	// Check if the token is valid
+	if !token.Valid {
+		return "", fmt.Errorf("Invalid token")
+	}
+
+	// Extract user role from claims
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return "", fmt.Errorf("Invalid token claims")
+	}
+
+	// Get user role
+	role, ok := claims["roles"].(string)
+	if !ok {
+		return "", fmt.Errorf("User role not found in token claims")
+	}
+
+	return role, nil
 }
