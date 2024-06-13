@@ -158,8 +158,6 @@ func HandleLogin(dbClient *mongo.Client) http.HandlerFunc {
 	}
 }
 
-// I THINK THIS FUNC SHOULD NOT BE AVAILABLE TO REQUEST
-
 func HandleGetUserByID(dbClient *mongo.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Extract user ID from URL parameters

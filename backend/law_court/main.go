@@ -38,7 +38,7 @@ func main() {
 
 	auth := client.NewAuthClient(&http.Client{}, "http://auth_service:8082")
 	mupvozila := client.NewMupvozilaClient(&http.Client{}, "http://mupvozila_service:8081")
-
+	saobracajnaPolicijaClient := client.NewSaobracajnaPolicijaClient("http://saobracajna_policija:8084")
 	r := mux.NewRouter()
 	r.HandleFunc("/get_user", func(w http.ResponseWriter, r *http.Request) {
 		userID := r.URL.Query().Get("id")
@@ -76,9 +76,8 @@ func main() {
 	r.HandleFunc("/hearings", court_handlers.ScheduleHearing(dbClient)).Methods("POST")
 	r.HandleFunc("/hearings/entity/{id}", court_handlers.GetHearingsByUserID(dbClient)).Methods("GET")
 	r.HandleFunc("/hearings/{id}", court_handlers.GetHearing(dbClient)).Methods("GET")
-	r.HandleFunc("/legal_requests", court_handlers.CreateLegalRequest(dbClient)).Methods("POST")
+	r.HandleFunc("/legal_requests", court_handlers.CreateLegalRequest(dbClient, saobracajnaPolicijaClient)).Methods("POST")
 	r.HandleFunc("/legal_requests/user/{id}", court_handlers.GetLegalRequestsByUserID(dbClient)).Methods("GET")
-	r.HandleFunc("/legal_requests/view_all", court_handlers.GetAllLegalRequests(dbClient)).Methods("GET")
 
 	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"})

@@ -40,7 +40,7 @@ type SearchWarrantRequest struct {
 	Address     string             `bson:"address" json:"address"`
 }
 
-func CreateLegalRequest(dbClient *mongo.Client) http.HandlerFunc {
+func CreateLegalRequest(dbClient *mongo.Client, saobracajClient *client.SaobracajnaPolicijaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var legalRequest data.LegalRequest
 		if err := json.NewDecoder(r.Body).Decode(&legalRequest); err != nil {
@@ -48,23 +48,70 @@ func CreateLegalRequest(dbClient *mongo.Client) http.HandlerFunc {
 			return
 		}
 
-		userID := r.Header.Get("UserID")
+		//userID := r.Header.Get("UserID")
+		//
+		//userObjID, err := primitive.ObjectIDFromHex(userID)
+		//if err != nil {
+		//	http.Error(w, err.Error(), http.StatusBadRequest)
+		//	return
+		//}
 
-		userObjID, err := primitive.ObjectIDFromHex(userID)
+		prekrsaji, err := saobracajClient.FetchPrekrsaji(r.Context())
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			http.Error(w, "Failed to fetch prekrsaji", http.StatusInternalServerError)
 			return
 		}
 
-		legalRequest.UserID = userObjID
-		legalRequest.RequestDate = time.Now()
+		userJMBG := legalRequest.UserJMBG // Assuming UserID holds the JMBG
+		userHasPrekrsaj := false
+		for _, prekrsaj := range prekrsaji {
+			if prekrsaj.Vozac == userJMBG {
+				userHasPrekrsaj = true
+				break
+			}
+		}
 
-		if err := data.CreateLegalRequest(dbClient, &legalRequest); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		if !userHasPrekrsaj {
+			legalEntity := data.LegalEntity{
+				Title:       "Potvrda o kaznjavanju",
+				Description: "Covek nema na sebi ni jedan prekrsaj",
+				IssueDate:   time.Now().Local(),
+				DueToDate:   time.Now().Local().Add(time.Hour * 24 * 10),
+				UserID:      legalRequest.UserID,
+			}
+			if err := data.CreateLegalEntity(dbClient, &legalEntity); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(http.StatusCreated)
+			json.NewEncoder(w).Encode(legalEntity)
+			return
+		} else {
+			legalEntity := data.LegalEntity{
+				Title:       "Potvrda o kaznjavanju",
+				Description: "Covek ima prekrsaj i to nije lepo",
+				IssueDate:   time.Now().Local(),
+				DueToDate:   time.Now().Local().Add(time.Hour * 24 * 10),
+				UserID:      legalRequest.UserID,
+			}
+			if err := data.CreateLegalEntity(dbClient, &legalEntity); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(http.StatusCreated)
+			json.NewEncoder(w).Encode(legalEntity)
 			return
 		}
 
-		w.WriteHeader(http.StatusCreated)
+		//legalRequest.UserID = userObjID
+		//legalRequest.RequestDate = time.Now()
+		//
+		//if err := data.CreateLegalRequest(dbClient, &legalRequest); err != nil {
+		//	http.Error(w, err.Error(), http.StatusInternalServerError)
+		//	return
+		//}
+		//
+		//w.WriteHeader(http.StatusCreated)
 	}
 }
 
