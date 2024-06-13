@@ -36,4 +36,16 @@ export class MupvozilaService {
   getVehicleById(id: string): Observable<any> {
     return this.http.get(`${this.configService._getVehicleById}` + id);
   }
+
+  getVehiclesByUserId(userId: string): Observable<any> {
+    return this.http.get(`${this.configService._mup_vozila_url}/cars/user/${userId}`);
+  }
+  
+  registerVehicle(registration: any): Observable<any> {
+    return this.http.post(`${this.configService._mup_vozila_url}/vehicles/register`, registration);
+  }
+
+  deleteVehicle(carId: string): Observable<any> {
+    return this.http.delete(`${this.configService._mup_vozila_url}/cars/${carId}`);
+  }
 }

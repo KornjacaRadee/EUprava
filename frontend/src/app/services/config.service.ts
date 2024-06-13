@@ -92,9 +92,9 @@ export class ConfigService {
 
 
     this._create_licences = this._mup_vozila_url + '/licenses';
-    this._create_vehicles = this._mup_vozila_url + '/vehicles';
+    this._create_vehicles = this._mup_vozila_url + '/cars';
     this._getAllLicences = this._mup_vozila_url + '/getAllLicenses';
-    this._getAllVehicles = this._mup_vozila_url + '/getAllVehicles';
+    this._getAllVehicles = this._mup_vozila_url + '/getAllCars';
     this._getLicenceById = this._mup_vozila_url + '/getLicenseById/user/';
     this._getVehicleById = this._mup_vozila_url + '/getVehicleById/user/';
 

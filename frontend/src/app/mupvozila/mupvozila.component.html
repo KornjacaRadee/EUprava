@@ -2,28 +2,59 @@
     <div class="container">
       <div class="row mt-3">
         <div class="col">
-          <button class="btn primary-btn marginbtn" (click)="openForm('registration')">Za registrovanje vozila</button>
-          <button class="btn primary-btn marginbtn" (click)="openForm('license')">Za izdavanje vozačkih dozvola</button>
+          <button class="btn primary-btn marginbtn" (click)="openForm('addVehicle')">Dodaj vozilo u sistem</button>
+          <button class="btn primary-btn marginbtn" (click)="openForm('registration')">Registruj vozilo</button> 
+          <button class="btn primary-btn marginbtn" (click)="openForm('license')">Izdavanje vozačkih dozvola</button>
         </div>
       </div>
-  
-      <!-- Vehicle Registration Form -->
-      <form *ngIf="selectedForm === 'registration'" class="form" (ngSubmit)="submitRegistration()">
+
+      <!-- Car Adding Form   Za sada radi vrhunski--> 
+      <form *ngIf="selectedForm === 'addVehicle'" class="form" (ngSubmit)="submitCar()">
         <div class="form-group">
-          <label for="vehicleName">Ime</label>
-          <input type="text" class="form-control" id="vehicleName" [(ngModel)]="registration.name" name="name" required>
+             <!-- Ovo cu verovtno da zamenim da ne bude bas ID, al za sad me mrzi 
+              jer moram da menjam i back hahahah--> 
+          <label for="carOwnerId">Owner ID</label>
+          <input type="text" class="form-control" id="carOwnerId" [(ngModel)]="car.owner_id" name="owner_id" required>
         </div>
         <div class="form-group">
-          <label for="vehicleIssuingDate">Datum Izdavanja</label>
-          <input type="datetime-local" class="form-control" id="vehicleIssuingDate" [(ngModel)]="registration.issuingDate" name="issuingDate" required>
+          <label for="carMake">Make</label>
+          <input type="text" class="form-control" id="carMake" [(ngModel)]="car.make" name="make" required>
         </div>
         <div class="form-group">
-          <label for="vehicleValidUntilDate">Važi Do</label>
-          <input type="datetime-local" class="form-control" id="vehicleValidUntilDate" [(ngModel)]="registration.validUntilDate" name="validUntilDate" required>
+          <label for="carModel">Model</label>
+          <input type="text" class="form-control" id="carModel" [(ngModel)]="car.model" name="model" required>
         </div>
-        <button type="submit" class="btn success-btn marginbtn">Registruj Vozilo</button>
+        <div class="form-group">
+          <label for="carYear">Year</label>
+          <input type="number" class="form-control" id="carYear" [(ngModel)]="car.year" name="year" required>
+        </div>
+        <div class="form-group">
+          <label for="carLicensePlate">License Plate</label>
+          <input type="text" class="form-control" id="carLicensePlate" [(ngModel)]="car.license_plate" name="license_plate" required>
+        </div>
+        <button type="submit" class="btn success-btn marginbtn">Dodaj vozilo</button>
       </form>
-  
+
+<!-- Vehicle Registration Form -->
+<form *ngIf="selectedForm === 'registration'" class="form" (ngSubmit)="submitRegistration()">
+  <div class="form-group">
+    <label for="carSelect">Select Car</label>
+    <select class="form-control" id="carSelect" [(ngModel)]="registration.car_id" name="car_id" required>
+      <option *ngFor="let vehicle of vehicles" [value]="vehicle.id">{{ vehicle.make }} {{ vehicle.model }} - {{ vehicle.license_plate }}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="vehicleIssuingDate">Datum Izdavanja</label>
+    <input type="datetime-local" class="form-control" id="vehicleIssuingDate" [(ngModel)]="registration.issuingDate" name="issuingDate" required>
+  </div>
+  <div class="form-group">
+    <label for="vehicleValidUntilDate">Važi Do</label>
+    <input type="datetime-local" class="form-control" id="vehicleValidUntilDate" [(ngModel)]="registration.validUntilDate" name="validUntilDate" required>
+  </div>
+  <button type="submit" class="btn success-btn marginbtn">Registruj Vozilo</button>
+</form>
+
+   
       <!-- Vehicle License Form -->
 <form *ngIf="selectedForm === 'license'" class="form" (ngSubmit)="submitLicense()">
   <div class="form-group">

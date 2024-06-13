@@ -16,12 +16,20 @@ export class MupvozilaHomeComponent implements OnInit {
   constructor(private mupvozilaService: MupvozilaService, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.getUserVehicles();
+   // this.getCurrentUserIdVehicles();
     this.getUserRegistrations();
     this.getUserLicenses();
+    this.getAllVehicles();
   }
 
-  getUserVehicles() {
+  // getCurrentUserIdVehicles() {
+  //   let id = this.authService.getUserId();
+  //   this.mupvozilaService.getVehiclesByUserId(id).subscribe((data: any) => {
+  //     this.vehicles = data;
+  //   });
+  // }
+
+  getAllVehicles() {
     let id = this.authService.getUserId();
     this.mupvozilaService.getAllVehicles().subscribe((data: any) => {
       this.vehicles = data;
@@ -39,6 +47,12 @@ export class MupvozilaHomeComponent implements OnInit {
     let id = this.authService.getUserId();
     this.mupvozilaService.getAllLicenses().subscribe((data: any) => {
       this.licenses = data;
+    });
+  }
+
+  deleteVehicle(carId: string) {
+    this.mupvozilaService.deleteVehicle(carId).subscribe(() => {
+      this.vehicles = this.vehicles.filter(vehicle => vehicle.id !== carId);
     });
   }
 }

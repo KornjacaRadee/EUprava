@@ -10,16 +10,21 @@ import { Router } from '@angular/router';
 })
 export class MupvozilaComponent implements OnInit {
   selectedForm: string = '';
-  registration: any = { name: '', issuingDate: '', validUntilDate: '' };
+  registration: any = { car_id: '', name: '', issuingDate: '', validUntilDate: '' };
   license: any = { type: '', expirationDate: '', issuedBy: '', vehicleId: '' };
-
+  car: any = { owner_id: '', make: '', model: '', year: '', license_plate: '' };
+  vehicles: any[] = [];
   constructor(private mupvozilaService: MupvozilaService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+
     if (!this.isMupWorker()) {
+          this.getAllVehicles();
       this.router.navigate(['/mupvozila']);
     }
+    
   }
+
 
   isMupWorker(): boolean {
     if(this.authService.getUserRole() == "mupWorker"){
@@ -49,18 +54,27 @@ export class MupvozilaComponent implements OnInit {
     return date.toISOString();
   }
   
+    submitCar() {
+    this.mupvozilaService.createVehicle(this.car).subscribe(response => {
+      console.log('Car Created:', response);
+      // Reset form
+      this.car = { owner_id: '', make: '', model: '', year: '', license_plate: '' };
+      this.selectedForm = '';
+    });
+  }
 
   submitRegistration() {
-    const formattedRegistration = {
-      ...this.registration,
+    const registration = {
+      car_id: this.registration.car_id,
+      name: this.authService.getUserId(),
       issuingDate: this.formatDatetimeLocal(this.registration.issuingDate),
       validUntilDate: this.formatDatetimeLocal(this.registration.validUntilDate)
     };
 
-    this.mupvozilaService.createVehicle(formattedRegistration).subscribe(response => {
-      console.log('Vehicle Registration Created:', response);
+    this.mupvozilaService.registerVehicle(registration).subscribe(response => {
+      console.log('Vehicle Registered:', response);
       // Reset form
-      this.registration = { name: '', issuingDate: '', validUntilDate: '' };
+      this.registration = { car_id: '', name: '', issuingDate: '', validUntilDate: '' };
       this.selectedForm = '';
     });
   }
@@ -77,5 +91,15 @@ export class MupvozilaComponent implements OnInit {
       this.license = { type: '', expirationDate: '', issuedBy: '', vehicleId: '' };
       this.selectedForm = '';
     });
+
+    
   }
+
+  getAllVehicles() {
+    this.mupvozilaService.getAllVehicles().subscribe((data: any) => {
+      this.vehicles = data;
+    });
+  }
+
+  
 }

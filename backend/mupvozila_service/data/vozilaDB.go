@@ -35,12 +35,49 @@ func InsertLicense(license *License) (*mongo.InsertOneResult, error) {
 }
 
 // InsertVehicle registers a vehicle into the database
-func InsertVehicle(vehicle *RegisterVehicle) (*mongo.InsertOneResult, error) {
-	result, err := carCollection.InsertOne(context.Background(), vehicle)
+func InsertRegisteredVehicle(vehicle *RegisterVehicle) (*mongo.InsertOneResult, error) {
+	result, err := registrationCollection.InsertOne(context.Background(), vehicle)
 	if err != nil {
 		log.Println("Error registering vehicle:", err)
 	}
 	return result, err
+}
+
+// InsertVehicle registers a vehicle into the database
+func InsertCar(vehicle *Car) (*mongo.InsertOneResult, error) {
+	result, err := carCollection.InsertOne(context.Background(), vehicle)
+	if err != nil {
+		log.Println("Error inserting car into db:", err)
+	}
+	return result, err
+}
+
+// GetAllCars retrieves all cars from the database
+func GetAllCars() ([]*Car, error) {
+	var cars []*Car
+
+	cursor, err := carCollection.Find(context.Background(), bson.M{})
+	if err != nil {
+		log.Println("Error retrieving cars:", err)
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var car Car
+		if err := cursor.Decode(&car); err != nil {
+			log.Println("Error decoding car:", err)
+			continue
+		}
+		cars = append(cars, &car)
+	}
+
+	if err := cursor.Err(); err != nil {
+		log.Println("Error iterating through cars:", err)
+		return nil, err
+	}
+
+	return cars, nil
 }
 
 // GetLicenseByID retrieves a driver's license by ID from the database
@@ -95,7 +132,7 @@ func GetAllLicenses() ([]*License, error) {
 func GetAllVehicles() ([]*RegisterVehicle, error) {
 	var vehicles []*RegisterVehicle
 
-	cursor, err := carCollection.Find(context.Background(), bson.M{})
+	cursor, err := registrationCollection.Find(context.Background(), bson.M{})
 	if err != nil {
 		log.Println("Error retrieving vehicles:", err)
 		return nil, err
@@ -138,4 +175,89 @@ func GetLicencesByUserID(dbClient *mongo.Client, userID primitive.ObjectID) ([]L
 	}
 
 	return licences, nil
+}
+
+// GetVehicleByRegistration retrieves a vehicle by its registration from the database
+func GetVehicleByRegistration(registration string) (*RegisterVehicle, error) {
+	if registration == "" {
+		return nil, nil
+	}
+
+	var vehicle RegisterVehicle
+	err := registrationCollection.FindOne(context.Background(), bson.M{"license_plate": registration}).Decode(&vehicle)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+		log.Println("Error retrieving vehicle by registration:", err)
+		return nil, err
+	}
+
+	return &vehicle, nil
+}
+
+// GetAllRegistrations retrieves all registered vehicles from the database
+func GetAllRegistrations() ([]*RegisterVehicle, error) {
+	var vehicles []*RegisterVehicle
+
+	cursor, err := registrationCollection.Find(context.Background(), bson.M{})
+	if err != nil {
+		log.Println("Error retrieving registrations:", err)
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var vehicle RegisterVehicle
+		if err := cursor.Decode(&vehicle); err != nil {
+			log.Println("Error decoding registration:", err)
+			continue
+		}
+		vehicles = append(vehicles, &vehicle)
+	}
+
+	if err := cursor.Err(); err != nil {
+		log.Println("Error iterating through registrations:", err)
+		return nil, err
+	}
+
+	return vehicles, nil
+}
+
+// GetCarsByUserID retrieves cars based on the user's ID from the database
+func GetCarsByUserID(userID primitive.ObjectID) ([]*Car, error) {
+	var cars []*Car
+
+	cursor, err := carCollection.Find(context.Background(), bson.M{"owner_id": userID})
+	if err != nil {
+		log.Println("Error retrieving cars by user ID:", err)
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var car Car
+		if err := cursor.Decode(&car); err != nil {
+			log.Println("Error decoding car:", err)
+			continue
+		}
+		cars = append(cars, &car)
+	}
+
+	if err := cursor.Err(); err != nil {
+		log.Println("Error iterating through cars:", err)
+		return nil, err
+	}
+
+	return cars, nil
+}
+
+// DeleteCarByID deletes a car by its ID from the database
+func DeleteCarByID(carID primitive.ObjectID) error {
+	_, err := carCollection.DeleteOne(context.Background(), bson.M{"_id": carID})
+	if err != nil {
+		log.Println("Error deleting car:", err)
+		return err
+	}
+	return nil
 }

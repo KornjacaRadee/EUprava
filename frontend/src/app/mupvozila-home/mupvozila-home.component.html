@@ -1,22 +1,32 @@
 <!-- court-home.component.html -->
 <div class="wrapper">
     <div>
-      <h2>Registracije Automobila</h2>
+      <h2>Automobili u sistemu</h2>
       <table class="table">
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Ime Vozaca</th>
-            <th scope="col">Datum Izdavanja</th>
-            <th scope="col">Vazi do</th>
+            <th scope="col">Owner id</th>
+            <th scope="col">Car id</th>
+            <th scope="col">Make</th>
+            <th scope="col">Model</th>
+            <th scope="col">Year</th>
+            <th scope="col">License Plate</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let registration of registrations; let i = index">
+          <tr *ngFor="let vehicle of vehicles; let i = index">
             <th scope="row">{{ i + 1 }}</th>
-            <td>{{ registration.name }}</td>
-            <td>{{ registration.issuing_date }}</td>
-            <td>{{ registration.valid_until_date }}</td>
+            <td>{{vehicle.owner_id}}</td>
+            <td>{{vehicle.id}}</td>
+            <td>{{ vehicle.make }}</td>
+            <td>{{ vehicle.model }}</td>
+            <td>{{ vehicle.year }}</td>
+            <td>{{ vehicle.license_plate}}</td>
+            <td>
+              <button (click)="deleteVehicle(vehicle.id)" class="btn btn-danger">Delete</button>
+            </td>
           </tr>
         </tbody>
       </table>

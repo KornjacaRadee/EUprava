@@ -34,6 +34,7 @@ type Licences []*License
 // RegisterVehicle represents a registered vehicle
 type RegisterVehicle struct {
 	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	CarID          primitive.ObjectID `bson:"car_id" json:"car_id" validate:"required"`
 	Name           string             `bson:"name" json:"name" validate:"required"`
 	IssuingDate    time.Time          `bson:"issuing_date" json:"issuing_date" validate:"required"`
 	ValidUntilDate time.Time          `bson:"valid_until_date" json:"valid_until_date" validate:"required"`

@@ -45,12 +45,20 @@ func main() {
 	// Routes
 	r.HandleFunc("/licenses", mupVozilaHandlers.IssueLicenseHandler).Methods("POST")
 	r.HandleFunc("/vehicles", mupVozilaHandlers.RegisterVehicleHandler).Methods("POST")
+	r.HandleFunc("/cars", mupVozilaHandlers.InsertCarHandler).Methods("POST")
+	r.HandleFunc("/cars/user/{user_id}", mupVozilaHandlers.GetCarsByUserIDHandler).Methods("GET")
+	r.HandleFunc("/cars/{car_id}", mupVozilaHandlers.DeleteCarByIDHandler).Methods("DELETE")
 	r.HandleFunc("/getAllLicenses", mupVozilaHandlers.GetAllLicensesHandler).Methods("GET")
 	r.HandleFunc("/getAllVehicles", mupVozilaHandlers.GetAllVehiclesHandler).Methods("GET")
+	r.HandleFunc("/getAllCars", mupVozilaHandlers.GetAllCarsHandler).Methods("GET")
 	r.HandleFunc("/getLicenseById/{id}", mupVozilaHandlers.GetLicenseByIDHandler).Methods("GET")
 	r.HandleFunc("/getVehicleById/{id}", mupVozilaHandlers.GetVehicleByIDHandler).Methods("GET")
 	r.HandleFunc("/getLicencesByUserID/user/{id}", mupVozilaHandlers.GetLicencesByUserID(dbClient)).Methods("GET")
-
+	// New route for retrieving vehicle by registration
+	r.HandleFunc("/vehicles/registration/{registration}", mupVozilaHandlers.GetVehicleByRegistrationHandler).Methods("GET")
+	// New route for retrieving all registrations
+	r.HandleFunc("/registrations", mupVozilaHandlers.GetAllRegistrationsHandler).Methods("GET")
+	r.HandleFunc("/vehicles/register", mupVozilaHandlers.RegisterVehicleHandler).Methods("POST")
 	// CORS setup
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"})

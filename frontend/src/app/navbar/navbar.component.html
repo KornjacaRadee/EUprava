@@ -13,6 +13,12 @@
       <a *ngIf="isCourtWorker()" routerLink="/create-law-etitities" class="nav-link logout-link" style="cursor:pointer;">Create new legal entity</a>
     </li>
 
+    <li class="nav-item">
+      <a class="nav-link home-link" *ngIf="signed()" routerLink="/mupvozila-home">Vehicles and Registrations</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link home-link" *ngIf="signed()" routerLink="/mupvozila">Vehicle options</a>
+    </li>
   </ul>
   </div>
   <div class="right-side">
