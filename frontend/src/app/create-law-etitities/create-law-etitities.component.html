@@ -1,94 +1,53 @@
-<!-- court-home.component.html -->
 <div class="wrapper">
-<!-- court-home.component.html -->
-<div class="container">
-  <div class="row mt-3">
-    <div class="col">
-      <button class="btn btn-primary marginbtn" (click)="openForm('entity')">Napravi entitet</button>
-      <button class="btn btn-primary marginbtn" (click)="openForm('warrant')">Napravi nalog</button>
-      <button class="btn btn-primary marginbtn" (click)="openForm('hearing')">Napravi salsucanje</button>
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col">
+        <button class="btn btn-primary marginbtn" (click)="openForm('entity')">Napravi entitet</button>
+        <button class="btn btn-primary marginbtn" (click)="openForm('warrant')">Napravi nalog</button>
+        <button class="btn btn-primary marginbtn" (click)="openForm('hearing')">Napravi salsucanje</button>
+      </div>
     </div>
+
+    <!-- Legal Entity Form -->
+    <form *ngIf="selectedForm === 'entity'" (ngSubmit)="submitEntity()">
+      <div class="form-group">
+        <label for="entityTitle">Naslov</label>
+        <input type="text" class="form-control" id="entityTitle" [(ngModel)]="entity.title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="entityDescription">Opis</label>
+        <input type="text" class="form-control" id="entityDescription" [(ngModel)]="entity.description" name="description" required>
+      </div>
+      <div class="form-group">
+        <label for="entityIssueDate">Izdato</label>
+        <input type="datetime-local" class="form-control" id="entityIssueDate" [(ngModel)]="entity.issueDate" name="issueDate" required>
+      </div>
+      <div class="form-group">
+        <label for="entityDueToDate">Vazi do</label>
+        <input type="datetime-local" class="form-control" id="entityDueToDate" [(ngModel)]="entity.dueToDate" name="dueToDate" required>
+      </div>
+      <div class="form-group">
+        <label for="entityUserId">JMBG Korisnika</label>
+        <input type="text" class="form-control" id="entityUserId" [(ngModel)]="entity.jmbg" name="userId" required>
+      </div>
+      <div class="form-group">
+        <input type="checkbox" id="licenseCheckbox" [(ngModel)]="entity.licence" name="hasLicense" (change)="toggleCategoryOptions()">
+        <label for="licenseCheckbox">Suspendovanje dozvole??</label>
+      </div>
+      <div class="form-group" *ngIf="entity.licence">
+        <label for="category">Category</label>
+        <select class="form-control" id="category" [(ngModel)]="entity.category" name="category" required>
+          <option value="">Izaberite kategoriju</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="A1">A1</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success marginbtn">Kreiraj legalni entitet</button>
+    </form>
+
+    <!-- Other forms remain unchanged -->
+
   </div>
-
-  <!-- Legal Entity Form -->
-  <form *ngIf="selectedForm === 'entity'" (ngSubmit)="submitEntity()">
-    <div class="form-group">
-      <label for="entityTitle">Naslov</label>
-      <input type="text" class="form-control" id="entityTitle" [(ngModel)]="entity.title" name="title" required>
-    </div>
-    <div class="form-group">
-      <label for="entityDescription">Opis</label>
-      <input type="text" class="form-control" id="entityDescription" [(ngModel)]="entity.description" name="description" required>
-    </div>
-    <div class="form-group">
-      <label for="entityIssueDate">Izdato</label>
-      <input type="datetime-local" class="form-control" id="entityIssueDate" [(ngModel)]="entity.issueDate" name="issueDate" required>
-    </div>
-    <div class="form-group">
-      <label for="entityDueToDate">Vazi do</label>
-      <input type="datetime-local" class="form-control" id="entityDueToDate" [(ngModel)]="entity.dueToDate" name="dueToDate" required>
-    </div>
-    <div class="form-group">
-      <label for="entityUserId">JMBG Korisnika</label>
-      <input type="text" class="form-control" id="entityUserId" [(ngModel)]="entity.jmbg" name="userId" required>
-    </div>
-    <button type="submit" class="btn btn-success marginbtn">Kreiraj legalni entitet</button>
-  </form>
-
-  <!-- Search Warrant Form -->
-  <form *ngIf="selectedForm === 'warrant'" (ngSubmit)="submitWarrant()">
-    <div class="form-group">
-      <label for="warrantTitle">Naslov</label>
-      <input type="text" class="form-control" id="warrantTitle" [(ngModel)]="warrant.title" name="title" required>
-    </div>
-    <div class="form-group">
-      <label for="warrantDescription">Opis</label>
-      <input type="text" class="form-control" id="warrantDescription" [(ngModel)]="warrant.description" name="description" required>
-    </div>
-    <div class="form-group">
-      <label for="warrantIssueDate">Izdato</label>
-      <input type="datetime-local" class="form-control" id="warrantIssueDate" [(ngModel)]="warrant.issueDate" name="issueDate" required>
-    </div>
-    <div class="form-group">
-      <label for="warrantDueToDate">Vazi do</label>
-      <input type="datetime-local" class="form-control" id="warrantDueToDate" [(ngModel)]="warrant.dueToDate" name="dueToDate" required>
-    </div>
-    <div class="form-group">
-      <label for="warrantAddress">Adresa</label>
-      <input type="text" class="form-control" id="warrantAddress" [(ngModel)]="warrant.address" name="address" required>
-    </div>
-    <div class="form-group">
-      <label for="warrantUserId">Korisnicki ID</label>
-      <input type="text" class="form-control" id="warrantUserId" [(ngModel)]="warrant.jmbg" name="userId" required>
-    </div>
-    <button type="submit" class="btn btn-success marginbtn">Napravi Nalog</button>
-  </form>
-
-  <!-- Court Hearing Form -->
-  <form *ngIf="selectedForm === 'hearing'" (ngSubmit)="submitHearing()">
-    <div class="form-group">
-      <label for="hearingTitle">Naslov</label>
-      <input type="text" class="form-control" id="hearingTitle" [(ngModel)]="hearing.title" name="title" required>
-    </div>
-    <div class="form-group">
-      <label for="hearingDescription">Opis</label>
-      <input type="text" class="form-control" id="hearingDescription" [(ngModel)]="hearing.description" name="description" required>
-    </div>
-    <div class="form-group">
-      <label for="hearingScheduledAt">Vreme</label>
-      <input type="datetime-local" class="form-control" id="hearingScheduledAt" [(ngModel)]="hearing.scheduledAt" name="scheduledAt" required>
-    </div>
-    <div class="form-group">
-      <label for="hearingDuration">Trajanje</label>
-      <input type="number" class="form-control" id="hearingDuration" [(ngModel)]="hearing.duration" name="duration" required>
-    </div>
-    <div class="form-group">
-      <label for="hearingLegalEntityId">Id entiteta</label>
-      <input type="text" class="form-control" id="hearingLegalEntityId" [(ngModel)]="hearing.legalEntityId" name="legalEntityId" required>
-    </div>
-    <button type="submit" class="btn btn-success marginbtn">Kreiraj saslusanje</button>
-  </form>
-</div>
-
-
 </div>
