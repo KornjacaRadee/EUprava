@@ -47,7 +47,62 @@
       <button type="submit" class="btn btn-success marginbtn">Kreiraj legalni entitet</button>
     </form>
 
-    <!-- Other forms remain unchanged -->
+    <form *ngIf="selectedForm === 'warrant'" (ngSubmit)="submitWarrant()">
+      <div class="form-group">
+        <label for="warrantTitle">Naslov</label>
+        <input type="text" class="form-control" id="warrantTitle" [(ngModel)]="warrant.title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="warrantDescription">Opis</label>
+        <input type="text" class="form-control" id="warrantDescription" [(ngModel)]="warrant.description" name="description" required>
+      </div>
+      <div class="form-group">
+        <label for="warrantIssueDate">Izdato</label>
+        <input type="datetime-local" class="form-control" id="warrantIssueDate" [(ngModel)]="warrant.issueDate" name="issueDate" required>
+      </div>
+      <div class="form-group">
+        <label for="warrantDueToDate">Vazi do</label>
+        <input type="datetime-local" class="form-control" id="warrantDueToDate" [(ngModel)]="warrant.dueToDate" name="dueToDate" required>
+      </div>
+      <div class="form-group">
+        <label for="warrantAddress">Adresa</label>
+        <input type="text" class="form-control" id="warrantAddress" [(ngModel)]="warrant.address" name="address" required>
+      </div>
+      <div class="form-group">
+        <label for="warrantUserId">Korisnicki ID</label>
+        <input type="text" class="form-control" id="warrantUserId" [(ngModel)]="warrant.jmbg" name="userId" required>
+      </div>
+      <button type="submit" class="btn btn-success marginbtn">Napravi Nalog</button>
+    </form>
+
+    <!-- Court Hearing Form -->
+    <form *ngIf="selectedForm === 'hearing'" (ngSubmit)="submitHearing()">
+      <div class="form-group">
+        <label for="hearingTitle">Naslov</label>
+        <input type="text" class="form-control" id="hearingTitle" [(ngModel)]="hearing.title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="hearingDescription">Opis</label>
+        <input type="text" class="form-control" id="hearingDescription" [(ngModel)]="hearing.description" name="description" required>
+      </div>
+      <div class="form-group">
+        <label for="hearingScheduledAt">Vreme</label>
+        <input type="datetime-local" class="form-control" id="hearingScheduledAt" [(ngModel)]="hearing.scheduledAt" name="scheduledAt" required>
+      </div>
+      <div class="form-group">
+        <label for="hearingDuration">Trajanje</label>
+        <input type="number" class="form-control" id="hearingDuration" [(ngModel)]="hearing.duration" name="duration" required>
+      </div>
+      <div class="form-group">
+        <label for="hearingLegalEntityId">Id entiteta</label>
+        <input type="text" class="form-control" id="hearingLegalEntityId" [(ngModel)]="hearing.legalEntityId" name="legalEntityId" required>
+      </div>
+      <button type="submit" class="btn btn-success marginbtn">Kreiraj saslusanje</button>
+    </form>
+  </div>
+
 
   </div>
-</div>
+
+
+

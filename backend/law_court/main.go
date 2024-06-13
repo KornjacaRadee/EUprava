@@ -76,6 +76,9 @@ func main() {
 	r.HandleFunc("/hearings", court_handlers.ScheduleHearing(dbClient)).Methods("POST")
 	r.HandleFunc("/hearings/entity/{id}", court_handlers.GetHearingsByUserID(dbClient)).Methods("GET")
 	r.HandleFunc("/hearings/{id}", court_handlers.GetHearing(dbClient)).Methods("GET")
+	r.HandleFunc("/legal_requests", court_handlers.CreateLegalRequest(dbClient)).Methods("POST")
+	r.HandleFunc("/legal_requests/user/{id}", court_handlers.GetLegalRequestsByUserID(dbClient)).Methods("GET")
+	r.HandleFunc("/legal_requests/view_all", court_handlers.GetAllLegalRequests(dbClient)).Methods("GET")
 
 	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"})

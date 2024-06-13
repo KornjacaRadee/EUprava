@@ -12,7 +12,11 @@
   padding-right: 100px;
   padding-left: 100px;
 }
-
+.left-side{
+  width: 50vw;
+  align-items: center;
+  flex-wrap: nowrap;
+}
 .navbar-nav {
   display:flex;
   flex-direction: row;

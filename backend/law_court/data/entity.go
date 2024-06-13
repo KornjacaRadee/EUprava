@@ -40,6 +40,63 @@ type Hearing struct {
 	LegalEntityID primitive.ObjectID `bson:"legalEntityId" json:"legalEntityId"`
 }
 
+type LegalRequest struct {
+	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Title       string             `bson:"title" json:"title"`
+	UserJMBG    string             `bson:"userJMBG" json:"userJMBG"`
+	RequestDate time.Time          `bson:"requestDate" json:"requestDate"`
+	UserID      primitive.ObjectID `bson:"userId" json:"userId"`
+}
+
+func CreateLegalRequest(dbClient *mongo.Client, legalRequest *LegalRequest) error {
+	legalRequestCollection := dbClient.Database("authDB").Collection("legal_requests")
+
+	_, err := legalRequestCollection.InsertOne(context.Background(), legalRequest)
+	return err
+}
+
+func GetLegalRequestsByUserID(dbClient *mongo.Client, userID primitive.ObjectID) ([]LegalRequest, error) {
+	legalRequestCollection := dbClient.Database("authDB").Collection("legal_requests")
+
+	var legalRequests []LegalRequest
+	cursor, err := legalRequestCollection.Find(context.Background(), bson.M{"userId": userID})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var legalRequest LegalRequest
+		if err := cursor.Decode(&legalRequest); err != nil {
+			return nil, err
+		}
+		legalRequests = append(legalRequests, legalRequest)
+	}
+
+	return legalRequests, nil
+}
+
+func GetAllLegalRequests(dbClient *mongo.Client) ([]LegalRequest, error) {
+	legalRequestCollection := dbClient.Database("authDB").Collection("legal_requests")
+
+	var legalRequests []LegalRequest
+	cursor, err := legalRequestCollection.Find(context.Background(), bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var legalRequest LegalRequest
+		if err := cursor.Decode(&legalRequest); err != nil {
+			return nil, err
+		}
+		legalRequests = append(legalRequests, legalRequest)
+	}
+
+	return legalRequests, nil
+}
+
 func CreateLegalEntity(dbClient *mongo.Client, legalEntity *LegalEntity) error {
 	legalEntityCollection := dbClient.Database("authDB").Collection("legal_entities")
 
