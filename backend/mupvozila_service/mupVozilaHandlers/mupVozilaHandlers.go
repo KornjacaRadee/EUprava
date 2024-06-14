@@ -236,3 +236,26 @@ func DeleteCarByIDHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNoContent) // 204 No Content
 }
+
+// DeleteRegistrationHandler handles requests to delete a registration by ID
+func DeleteRegistrationHandler(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	registrationID := params["id"] // Assuming your URL path parameter is named "id"
+
+	// Convert registration ID from string to MongoDB ObjectID
+	objectID, err := primitive.ObjectIDFromHex(registrationID)
+	if err != nil {
+		http.Error(w, "Invalid registration ID", http.StatusBadRequest)
+		return
+	}
+
+	// Call the data layer function to delete the registration
+	err = data.DeleteRegistrationByID(objectID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Respond with success message or appropriate response
+	w.WriteHeader(http.StatusNoContent) // 204 No Content
+}

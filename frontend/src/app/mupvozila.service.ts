@@ -29,6 +29,11 @@ export class MupvozilaService {
     return this.http.get(`${this.configService._getAllVehicles}`);
   }
 
+  getAllRegistrations(): Observable<any> {
+    return this.http.get(`${this.configService._mup_vozila_url}/registrations`);
+  }
+
+
   getLicenseById(id: string): Observable<any> {
     return this.http.get(`${this.configService._getLicenceById}` + id);
   }
@@ -40,7 +45,7 @@ export class MupvozilaService {
   getVehiclesByUserId(userId: string): Observable<any> {
     return this.http.get(`${this.configService._mup_vozila_url}/cars/user/${userId}`);
   }
-  
+
   registerVehicle(registration: any): Observable<any> {
     return this.http.post(`${this.configService._mup_vozila_url}/vehicles/register`, registration);
   }
@@ -48,4 +53,9 @@ export class MupvozilaService {
   deleteVehicle(carId: string): Observable<any> {
     return this.http.delete(`${this.configService._mup_vozila_url}/cars/${carId}`);
   }
+
+  deleteRegistration(registrationId: string): Observable<any> {
+    return this.http.delete(`${this.configService._mup_vozila_url}/registrations/${registrationId}`);
+  }
+
 }

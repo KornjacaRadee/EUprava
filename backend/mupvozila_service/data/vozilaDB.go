@@ -261,3 +261,13 @@ func DeleteCarByID(carID primitive.ObjectID) error {
 	}
 	return nil
 }
+
+// DeleteRegistrationByID deletes a registration by its ID from the database
+func DeleteRegistrationByID(registrationID primitive.ObjectID) error {
+	_, err := registrationCollection.DeleteOne(context.Background(), bson.M{"_id": registrationID})
+	if err != nil {
+		log.Println("Error deleting registrations:", err)
+		return err
+	}
+	return nil
+}

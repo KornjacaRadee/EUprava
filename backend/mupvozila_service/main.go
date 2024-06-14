@@ -58,6 +58,7 @@ func main() {
 	r.HandleFunc("/vehicles/registration/{registration}", mupVozilaHandlers.GetVehicleByRegistrationHandler).Methods("GET")
 	// New route for retrieving all registrations
 	r.HandleFunc("/registrations", mupVozilaHandlers.GetAllRegistrationsHandler).Methods("GET")
+	r.HandleFunc("/registrations/{id}", mupVozilaHandlers.DeleteRegistrationHandler).Methods("DELETE")
 	r.HandleFunc("/vehicles/register", mupVozilaHandlers.RegisterVehicleHandler).Methods("POST")
 	// CORS setup
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})

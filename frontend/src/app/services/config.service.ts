@@ -39,7 +39,6 @@ export class ConfigService {
   _getLicenceById: string ;
   _getVehicleById: string ;
 
-
   _create_nesreca: string;
   _get_nesreca: string;
   _delete_nesreca: string;

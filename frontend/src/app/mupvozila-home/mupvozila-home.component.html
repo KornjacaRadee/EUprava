@@ -31,7 +31,35 @@
         </tbody>
       </table>
     </div>
-    
+    <div>
+      <h2>Registracije</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Car</th>
+            <th scope="col">name</th>
+            <th scope="col">issuing_date</th>
+            <th scope="col">valid_until_date</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let registration of registrations; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ registration.id}}</td>
+            <td>{{ registration.car_id}}</td>
+            <td>{{ registration.name}}</td>
+            <td>{{ registration.issuing_date}}</td>
+            <td>{{ registration.valid_until_date}}</td>
+            <td>
+              <button (click)="deleteRegistration(registration.id)" class="btn btn-danger">Delete</button>
+          </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div>
       <h2>Vozacke Dozvole</h2>
       <table class="table">

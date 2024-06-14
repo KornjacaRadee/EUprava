@@ -20,6 +20,7 @@ export class MupvozilaHomeComponent implements OnInit {
     this.getUserRegistrations();
     this.getUserLicenses();
     this.getAllVehicles();
+    this.getAllRegistrations();
   }
 
   // getCurrentUserIdVehicles() {
@@ -55,4 +56,18 @@ export class MupvozilaHomeComponent implements OnInit {
       this.vehicles = this.vehicles.filter(vehicle => vehicle.id !== carId);
     });
   }
+
+  getAllRegistrations() {
+    this.mupvozilaService.getAllRegistrations().subscribe((data: any) => {
+      this.registrations = data;
+    });
+  }
+
+  deleteRegistration(registrationId: string) {
+    this.mupvozilaService.deleteRegistration(registrationId).subscribe(() => {
+      this.registrations = this.registrations.filter(registration => registration.id !== registrationId);
+    });
+  }
+
+
 }
