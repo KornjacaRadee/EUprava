@@ -48,7 +48,10 @@ func main() {
 	r.HandleFunc("/cars", mupVozilaHandlers.InsertCarHandler).Methods("POST")
 	r.HandleFunc("/cars/user/{user_id}", mupVozilaHandlers.GetCarsByUserIDHandler).Methods("GET")
 	r.HandleFunc("/cars/{car_id}", mupVozilaHandlers.DeleteCarByIDHandler).Methods("DELETE")
+	r.HandleFunc("/cars/{id}", mupVozilaHandlers.UpdateCarHandler).Methods("PUT")
 	r.HandleFunc("/getAllLicenses", mupVozilaHandlers.GetAllLicensesHandler).Methods("GET")
+	r.HandleFunc("/licenses/{license_id}", mupVozilaHandlers.DeleteLicenseByIDHandler).Methods("DELETE")
+	r.HandleFunc("/licenses/user/{jmbg}", mupVozilaHandlers.GetLicensesByUserJMBGHandler).Methods("GET")
 	r.HandleFunc("/getAllVehicles", mupVozilaHandlers.GetAllVehiclesHandler).Methods("GET")
 	r.HandleFunc("/getAllCars", mupVozilaHandlers.GetAllCarsHandler).Methods("GET")
 	r.HandleFunc("/getLicenseById/{id}", mupVozilaHandlers.GetLicenseByIDHandler).Methods("GET")
@@ -60,10 +63,16 @@ func main() {
 	r.HandleFunc("/registrations", mupVozilaHandlers.GetAllRegistrationsHandler).Methods("GET")
 	r.HandleFunc("/registrations/{id}", mupVozilaHandlers.DeleteRegistrationHandler).Methods("DELETE")
 	r.HandleFunc("/vehicles/register", mupVozilaHandlers.RegisterVehicleHandler).Methods("POST")
+
+ // New routes for updating registrations and licenses
+    r.HandleFunc("/registrations/{id}", mupVozilaHandlers.UpdateRegistrationHandler).Methods("PUT")
+    r.HandleFunc("/licenses/{id}", mupVozilaHandlers.UpdateLicenseHandler).Methods("PUT")
+
+
 	// CORS setup
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"})
-	origins := handlers.AllowedOrigins([]string{"http://localhost:4200"}) // Update with your frontend origin
+	origins := handlers.AllowedOrigins([]string{"http://localhost:4200"})
 	handlerWithCORS := handlers.CORS(headers, methods, origins)(r)
 
 	// Start server

@@ -43,9 +43,9 @@ func InsertRegisteredVehicle(vehicle *RegisterVehicle) (*mongo.InsertOneResult, 
 	return result, err
 }
 
-// InsertVehicle registers a vehicle into the database
-func InsertCar(vehicle *Car) (*mongo.InsertOneResult, error) {
-	result, err := carCollection.InsertOne(context.Background(), vehicle)
+// InsertCar registers a car into the database
+func InsertCar(car *Car) (*mongo.InsertOneResult, error) {
+	result, err := carCollection.InsertOne(context.Background(), car)
 	if err != nil {
 		log.Println("Error inserting car into db:", err)
 	}
@@ -78,6 +78,62 @@ func GetAllCars() ([]*Car, error) {
 	}
 
 	return cars, nil
+}
+
+// GetCarsByOwnerJMBG retrieves cars based on the owner's JMBG from the database
+func GetCarsByOwnerJMBG(ownerJMBG string) ([]*Car, error) {
+	var cars []*Car
+
+	cursor, err := carCollection.Find(context.Background(), bson.M{"owner_jmbg": ownerJMBG})
+	if err != nil {
+		log.Println("Error retrieving cars by owner JMBG:", err)
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var car Car
+		if err := cursor.Decode(&car); err != nil {
+			log.Println("Error decoding car:", err)
+			continue
+		}
+		cars = append(cars, &car)
+	}
+
+	if err := cursor.Err(); err != nil {
+		log.Println("Error iterating through cars:", err)
+		return nil, err
+	}
+
+	return cars, nil
+}
+
+// GetLicensesByUserJMBG retrieves licenses by user's JMBG from the database
+func GetLicensesByUserJMBG(userJMBG string) ([]*License, error) {
+	var licenses []*License
+
+	cursor, err := licenseCollection.Find(context.Background(), bson.M{"user_jmbg": userJMBG})
+	if err != nil {
+		log.Println("Error retrieving licenses:", err)
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var license License
+		if err := cursor.Decode(&license); err != nil {
+			log.Println("Error decoding license:", err)
+			continue
+		}
+		licenses = append(licenses, &license)
+	}
+
+	if err := cursor.Err(); err != nil {
+		log.Println("Error iterating through licenses:", err)
+		return nil, err
+	}
+
+	return licenses, nil
 }
 
 // GetLicenseByID retrieves a driver's license by ID from the database
@@ -270,4 +326,72 @@ func DeleteRegistrationByID(registrationID primitive.ObjectID) error {
 		return err
 	}
 	return nil
+}
+
+// DeleteLicenseByID deletes a license by its ID from the database
+func DeleteLicenseByID(licenseID primitive.ObjectID) error {
+	_, err := licenseCollection.DeleteOne(context.Background(), bson.M{"_id": licenseID})
+	if err != nil {
+		log.Println("Error deleting license:", err)
+		return err
+	}
+	return nil
+}
+
+// UpdateCar updates a car in the database
+func UpdateCar(car *Car) error {
+	filter := bson.M{"_id": car.ID}
+	update := bson.M{
+		"$set": bson.M{
+			"owner_jmbg":    car.OwnerJMBG,
+			"make":          car.Make,
+			"model":         car.Model,
+			"year":          car.Year,
+			"license_plate": car.LicensePlate,
+		},
+	}
+	_, err := carCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Println("Error updating car:", err)
+	}
+	return err
+}
+
+// UpdateRegistration updates a registration in the database
+func UpdateRegistration(registration *RegisterVehicle) error {
+    filter := bson.M{"_id": registration.ID}
+    update := bson.M{
+        "$set": bson.M{
+            "car_id":           registration.CarID,
+            "name":             registration.Name,
+            "issuing_date":     registration.IssuingDate,
+            "valid_until_date": registration.ValidUntilDate,
+        },
+    }
+    _, err := registrationCollection.UpdateOne(context.Background(), filter, update)
+    if err != nil {
+        log.Println("Error updating registration:", err)
+    }
+    return err
+}
+
+// UpdateLicense updates a license in the database
+func UpdateLicense(license *License) error {
+    filter := bson.M{"_id": license.ID}
+    update := bson.M{
+        "$set": bson.M{
+            "user_jmbg":       license.UserJMBG,
+            "category":        license.Category,
+            "issuing_date":    license.IssuingDate,
+            "valid_until_date": license.ValidUntilDate,
+            "address":         license.Address,
+            "points":          license.Points,
+            "is_valid":        license.IsValid,
+        },
+    }
+    _, err := licenseCollection.UpdateOne(context.Background(), filter, update)
+    if err != nil {
+        log.Println("Error updating license:", err)
+    }
+    return err
 }

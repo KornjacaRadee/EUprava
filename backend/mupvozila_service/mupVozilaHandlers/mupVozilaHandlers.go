@@ -29,6 +29,22 @@ func IssueLicenseHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(result.InsertedID)
 }
 
+// GetLicensesByUserJMBGHandler handles requests to retrieve licenses by user's JMBG
+func GetLicensesByUserJMBGHandler(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	userJMBG := params["jmbg"]
+
+	licenses, err := data.GetLicensesByUserJMBG(userJMBG)
+	if err != nil {
+		log.Println("Error retrieving licenses:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Respond with the retrieved licenses
+	json.NewEncoder(w).Encode(licenses)
+}
+
 // RegisterVehicleHandler handles requests to register vehicles
 func RegisterVehicleHandler(w http.ResponseWriter, r *http.Request) {
 	var vehicle data.RegisterVehicle
@@ -258,4 +274,76 @@ func DeleteRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Respond with success message or appropriate response
 	w.WriteHeader(http.StatusNoContent) // 204 No Content
+}
+
+// DeleteLicenseByIDHandler handles requests to delete a license by its ID
+func DeleteLicenseByIDHandler(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	licenseID, err := primitive.ObjectIDFromHex(params["license_id"])
+	if err != nil {
+		http.Error(w, "Invalid license ID", http.StatusBadRequest)
+		return
+	}
+
+	err = data.DeleteLicenseByID(licenseID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent) // 204 No Content
+}
+
+// UpdateCarHandler handles requests to update a car
+func UpdateCarHandler(w http.ResponseWriter, r *http.Request) {
+	var car data.Car
+	err := json.NewDecoder(r.Body).Decode(&car)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = data.UpdateCar(&car)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent) // 204 No Content
+}
+
+// UpdateRegistrationHandler handles requests to update a registration
+func UpdateRegistrationHandler(w http.ResponseWriter, r *http.Request) {
+    var registration data.RegisterVehicle
+    err := json.NewDecoder(r.Body).Decode(&registration)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+
+    err = data.UpdateRegistration(&registration)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    w.WriteHeader(http.StatusNoContent) // 204 No Content
+}
+
+// UpdateLicenseHandler handles requests to update a license
+func UpdateLicenseHandler(w http.ResponseWriter, r *http.Request) {
+    var license data.License
+    err := json.NewDecoder(r.Body).Decode(&license)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+
+    err = data.UpdateLicense(&license)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    w.WriteHeader(http.StatusNoContent) // 204 No Content
 }
