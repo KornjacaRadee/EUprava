@@ -4,7 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"log"
-
+    "fmt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -137,6 +137,23 @@ func GetCarsByOwnerJMBG(ownerJMBG string) ([]*Car, error) {
 	}
 
 	return cars, nil
+}
+
+
+func GetCarByLicensePlate(ctx context.Context, licensePlate string) (*Car, error) {
+	var car Car
+	filter := bson.M{"license_plate": licensePlate}
+
+	// Pretražujemo kolekciju vozila
+	err := carCollection.FindOne(ctx, filter).Decode(&car)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, fmt.Errorf("car with license plate %s not found", licensePlate)
+		}
+		return nil, fmt.Errorf("error finding car: %v", err)
+	}
+
+	return &car, nil
 }
 
 // GetLicensesByUserJMBG retrieves licenses by user's JMBG from the database
