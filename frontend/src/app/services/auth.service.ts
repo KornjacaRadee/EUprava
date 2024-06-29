@@ -41,7 +41,9 @@ export class AuthService {
   register(user: User): Observable<any> {
     return this.http.post(`${this.configService._register_url}`, user);
   }
-
+  getUser(id: string): Observable<any> {
+    return this.http.get(`${this.configService._get_user}`+id);
+  }
 
   login(credentials: LoginCredentials): Observable<any> {
     return this.http.post(`${this.configService._login_url}`, credentials).pipe(
@@ -82,6 +84,18 @@ export class AuthService {
     }
     return "";
   }
+
+//  commented for merging because I think this doesn't get used anywhere 
+//   getUserJMBG(): string {
+//     const token = this.getAuthToken();
+//     if (token) {
+//       const decodedToken = this.helper.decodeToken(token);
+//       return decodedToken.jmbg; // Ensure jmbg is included in the token payload
+//     }
+//     return '';
+//   }
+// =======
+//
 
   // decodeToken(token: string): any {
   //   try {

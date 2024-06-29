@@ -1,0 +1,47 @@
+<div class="container">
+  <h2>My Vehicles</h2>
+  <div *ngIf="vehicles.length === 0">No vehicles found.</div>
+  <table class="table" *ngIf="vehicles.length > 0">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Year</th>
+        <th>License Plate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let vehicle of vehicles; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ vehicle.make }}</td>
+        <td>{{ vehicle.model }}</td>
+        <td>{{ vehicle.year }}</td>
+        <td>{{ vehicle.license_plate }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>My Licenses</h2>
+  <div *ngIf="licenses.length === 0">No licenses found.</div>
+  <table class="table" *ngIf="licenses.length > 0">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Category</th>
+        <th>Issuing Date</th>
+        <th>Valid Until Date</th>
+        <th>Points</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let license of licenses; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ license.category }}</td>
+        <td>{{ license.issuing_date | date }}</td>
+        <td>{{ license.valid_until_date | date }}</td>
+        <td>{{ license.points }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

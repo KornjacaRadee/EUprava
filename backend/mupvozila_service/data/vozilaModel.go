@@ -8,7 +8,7 @@ import (
 // Car represents a car in the system
 type Car struct {
 	ID           primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	OwnerID      primitive.ObjectID `bson:"owner_id" json:"owner_id"`
+	OwnerJMBG    string             `bson:"owner_jmbg" json:"owner_jmbg" validate:"required"`
 	Make         string             `bson:"make" json:"make" validate:"required"`
 	Model        string             `bson:"model" json:"model" validate:"required"`
 	Year         int                `bson:"year" json:"year" validate:"required"`
@@ -20,7 +20,7 @@ type Cars []*Car
 // License represents a driver's license
 type License struct {
 	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	UserID         primitive.ObjectID `bson:"user_id" json:"user_id"`
+	UserJMBG       string             `bson:"user_jmbg" json:"user_jmbg" validate:"required"`
 	Category       string             `bson:"category" json:"category" validate:"required"`
 	IssuingDate    time.Time          `bson:"issuing_date" json:"issuing_date" validate:"required"`
 	ValidUntilDate time.Time          `bson:"valid_until_date" json:"valid_until_date" validate:"required"`
@@ -34,6 +34,7 @@ type Licences []*License
 // RegisterVehicle represents a registered vehicle
 type RegisterVehicle struct {
 	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	CarID          primitive.ObjectID `bson:"car_id" json:"car_id" validate:"required"`
 	Name           string             `bson:"name" json:"name" validate:"required"`
 	IssuingDate    time.Time          `bson:"issuing_date" json:"issuing_date" validate:"required"`
 	ValidUntilDate time.Time          `bson:"valid_until_date" json:"valid_until_date" validate:"required"`
