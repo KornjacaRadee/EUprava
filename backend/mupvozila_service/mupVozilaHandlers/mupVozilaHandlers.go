@@ -10,6 +10,11 @@ import (
 	"net/http"
 )
 
+type UpdateValidityRequest struct {
+	IsValid  bool   `json:"is_valid"`
+	category string `json:"category"`
+}
+
 // IssueLicenseHandler handles requests to issue driver's licenses
 func IssueLicenseHandler(w http.ResponseWriter, r *http.Request) {
 	var license data.License
@@ -62,6 +67,34 @@ func RegisterVehicleHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Respond with the inserted vehicle ID
 	json.NewEncoder(w).Encode(result.InsertedID)
+}
+
+func UpdateLicenseValidityHandler(dbClient *mongo.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		params := mux.Vars(r)
+		userID, err := primitive.ObjectIDFromHex(params["id"])
+		if err != nil {
+			http.Error(w, "Invalid userID", http.StatusBadRequest)
+			return
+		}
+		category := params["category"]
+
+		var req UpdateValidityRequest
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		log.Printf("Updating licenses for user ID: %s and category: %s to IsValid: %v\n", userID.Hex(), category, req.IsValid)
+
+		result, err := data.UpdateLicenseValidityByUserIDAndCategory(userID, category, req.IsValid)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(result)
+	}
 }
 
 // GetAllLicensesHandler handles requests to retrieve all driver's licenses

@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class CreateLawEtititiesComponent implements OnInit{
   selectedForm: string = '';
-  entity: any = { title: '', description: '', issueDate: '', dueToDate: '', userId: '' };
+  entity: any = { title: '', description: '', issueDate: '', dueToDate: '', userId: '',licence: "",category: "" };
   warrant: any = { title: '', description: '', issueDate: '', dueToDate: '', jmbg: '', address: '' };
   hearing: any = { title: '', description: '', scheduledAt: '', duration: 0, legalEntityId: '' };
 
@@ -27,6 +27,11 @@ export class CreateLawEtititiesComponent implements OnInit{
       return true
     }else{
       return false
+    }
+  }
+  toggleCategoryOptions() {
+    if (!this.entity.licence) {
+      this.entity.category = ''; // Reset category if license is unchecked
     }
   }
 

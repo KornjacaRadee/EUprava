@@ -9,12 +9,14 @@ export class ConfigService {
   _api_url: string;
   _auth_url: string;
   _register_url: string;
+  _get_user: string;
 
 
   _login_url: string;
   _court_url: string;
 
   _create_entity: string;
+  _create_request: string;
   _get_user_entities: string;
   _get_entity: string;
 
@@ -67,8 +69,11 @@ export class ConfigService {
 
     this._login_url = this._auth_url + '/api/auth/login';
 
+    this._get_user = this._auth_url + '/api/auth/users/';
+
 //COURT ROUTES
 
+  this._create_request = this._court_url + '/legal_requests';
     this._create_entity = this._court_url + '/legal_entities';
     this._get_user_entities = this._court_url + '/legal_entities/user/';
     this._get_entity = this._court_url + '/legal_entities/';
