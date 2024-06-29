@@ -24,4 +24,12 @@ export class NavbarComponent {
       return false
     }
   }
+
+  isMupWorker(): boolean{
+  if(this.authService.getUserRole() == "mupWorker"){
+    return true 
+  }else{
+    return false
+  }
+  }
 }

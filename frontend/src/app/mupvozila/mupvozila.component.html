@@ -2,55 +2,92 @@
     <div class="container">
       <div class="row mt-3">
         <div class="col">
-          <button class="btn primary-btn marginbtn" (click)="openForm('registration')">Za registrovanje vozila</button>
-          <button class="btn primary-btn marginbtn" (click)="openForm('license')">Za izdavanje vozačkih dozvola</button>
+          <button class="btn primary-btn marginbtn" (click)="openForm('addVehicle')">Dodaj vozilo u sistem</button>
+          <button class="btn primary-btn marginbtn" (click)="openForm('registration')">Registruj vozilo</button> 
+          <button class="btn primary-btn marginbtn" (click)="openForm('license')">Izdavanje vozačkih dozvola</button>
         </div>
       </div>
-  
-      <!-- Vehicle Registration Form -->
-      <form *ngIf="selectedForm === 'registration'" class="form" (ngSubmit)="submitRegistration()">
-        <div class="form-group">
-          <label for="vehicleName">Ime</label>
-          <input type="text" class="form-control" id="vehicleName" [(ngModel)]="registration.name" name="name" required>
-        </div>
-        <div class="form-group">
-          <label for="vehicleIssuingDate">Datum Izdavanja</label>
-          <input type="datetime-local" class="form-control" id="vehicleIssuingDate" [(ngModel)]="registration.issuingDate" name="issuingDate" required>
-        </div>
-        <div class="form-group">
-          <label for="vehicleValidUntilDate">Važi Do</label>
-          <input type="datetime-local" class="form-control" id="vehicleValidUntilDate" [(ngModel)]="registration.validUntilDate" name="validUntilDate" required>
-        </div>
-        <button type="submit" class="btn success-btn marginbtn">Registruj Vozilo</button>
-      </form>
-  
-      <!-- Vehicle License Form -->
-<form *ngIf="selectedForm === 'license'" class="form" (ngSubmit)="submitLicense()">
+
+ <!-- Vehicle Adding Form -->
+<form *ngIf="selectedForm === 'addVehicle'" class="form" (ngSubmit)="submitCar()">
   <div class="form-group">
-    <label for="licenseCategory">Kategorija</label>
-    <input type="text" class="form-control" id="licenseCategory" [(ngModel)]="license.category" name="category" required>
+    <label for="ownerJmbg">Owner JMBG</label>
+    <input type="text" class="form-control" id="ownerJmbg" [(ngModel)]="car.owner_jmbg" name="owner_jmbg" required>
   </div>
   <div class="form-group">
-    <label for="licenseIssuingDate">Datum Izdavanja</label>
-    <input type="datetime-local" class="form-control" id="licenseIssuingDate" [(ngModel)]="license.issuingDate" name="issuingDate" required>
+    <label for="carMake">Make</label>
+    <input type="text" class="form-control" id="carMake" [(ngModel)]="car.make" name="make" required>
   </div>
   <div class="form-group">
-    <label for="licenseValidUntilDate">Vazi Do</label>
-    <input type="datetime-local" class="form-control" id="licenseValidUntilDate" [(ngModel)]="license.validUntilDate" name="validUntilDate" required>
+    <label for="carModel">Model</label>
+    <input type="text" class="form-control" id="carModel" [(ngModel)]="car.model" name="model" required>
   </div>
   <div class="form-group">
-    <label for="licenseAddress">Adresa</label>
-    <input type="text" class="form-control" id="licenseAddress" [(ngModel)]="license.address" name="address" required>
+    <label for="carYear">Year</label>
+    <input type="number" class="form-control" id="carYear" [(ngModel)]="car.year" name="year" required>
   </div>
   <div class="form-group">
-    <label for="licensePoints">Poeni</label>
-    <input type="number" class="form-control" id="licensePoints" [(ngModel)]="license.points" name="points" required>
+    <label for="licensePlate">License Plate</label>
+    <input type="text" class="form-control" id="licensePlate" [(ngModel)]="car.license_plate" name="license_plate" required>
   </div>
-  <div class="form-group">
-    <label for="licenseIsValid">je Vazeca</label>
-    <input type="checkbox" class="form-check-input" id="licenseIsValid" [(ngModel)]="license.isValid" name="isValid">
-  </div>
-  <button type="submit" class="btn success-btn marginbtn">Issue License</button>
+  <button type="submit" class="btn success-btn marginbtn">Dodaj vozilo</button>
 </form>
 
-  
+<!-- Vehicle Registration Form -->
+<form *ngIf="selectedForm === 'registration'" class="form" (ngSubmit)="submitRegistration()">
+  <div class="form-group">
+    <label for="carSelect">Select Car</label>
+    <select class="form-control" id="carSelect" [(ngModel)]="registration.car_id" name="car_id" required>
+      <option *ngFor="let vehicle of vehicles" [value]="vehicle.id">{{ vehicle.make }} {{ vehicle.model }} - {{ vehicle.license_plate }}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="vehicleIssuingDate">Datum Izdavanja</label>
+    <input type="datetime-local" class="form-control" id="vehicleIssuingDate" [(ngModel)]="registration.issuingDate" name="issuingDate" required>
+  </div>
+  <div class="form-group">
+    <label for="vehicleValidUntilDate">Važi Do</label>
+    <input type="datetime-local" class="form-control" id="vehicleValidUntilDate" [(ngModel)]="registration.validUntilDate" name="validUntilDate" required>
+  </div>
+  <button type="submit" class="btn success-btn marginbtn">Registruj Vozilo</button>
+</form>
+
+   
+   <!-- Vehicle License Form -->
+   <form *ngIf="selectedForm === 'license'" class="form" (ngSubmit)="issueLicense()">
+    <div class="form-group">
+      <label for="user_jmbg">User JMBG</label>
+      <input type="text" class="form-control" id="user_jmbg" [(ngModel)]="newLicense.user_jmbg" name="user_jmbg" required>
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <div *ngFor="let category of categories">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" [(ngModel)]="category.selected" name="category_{{category.name}}">
+          {{category.name}}
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="issuing_date">Issuing Date</label>
+      <input type="date" class="form-control" id="issuing_date" [(ngModel)]="newLicense.issuing_date" name="issuing_date" required>
+    </div>
+    <div class="form-group">
+      <label for="valid_until_date">Valid Until Date</label>
+      <input type="date" class="form-control" id="valid_until_date" [(ngModel)]="newLicense.valid_until_date" name="valid_until_date" required>
+    </div>
+    <div class="form-group">
+      <label for="address">Address</label>
+      <input type="text" class="form-control" id="address" [(ngModel)]="newLicense.address" name="address">
+    </div>
+    <div class="form-group">
+      <label for="points">Points</label>
+      <input type="number" class="form-control" id="points" [(ngModel)]="newLicense.points" name="points">
+    </div>
+    <div class="form-group">
+      <label for="is_valid">Is Valid</label>
+      <input type="checkbox" id="is_valid" [(ngModel)]="newLicense.is_valid" name="is_valid">
+    </div>
+    <button type="submit" class="btn btn-primary">Issue License</button>
+  </form>
+</div>

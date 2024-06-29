@@ -1,27 +1,104 @@
 <!-- court-home.component.html -->
 <div class="wrapper">
     <div>
-      <h2>Registracije Automobila</h2>
+      <h2>Automobili u sistemu</h2>
       <table class="table">
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Ime Vozaca</th>
-            <th scope="col">Datum Izdavanja</th>
-            <th scope="col">Vazi do</th>
+            <th scope="col">Owner jmbg</th>
+            <th scope="col">Make</th>
+            <th scope="col">Model</th>
+            <th scope="col">Year</th>
+            <th scope="col">License Plate</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let vehicle of vehicles; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{vehicle.owner_jmbg }}</td>
+            <td>{{ vehicle.make }}</td>
+            <td>{{ vehicle.model }}</td>
+            <td>{{ vehicle.year }}</td>
+            <td>{{ vehicle.license_plate}}</td>
+            <td>
+              <button (click)="deleteVehicle(vehicle.id)" class="btn btn-danger">Delete</button>
+              <button (click)="selectCarForEdit(vehicle)" class="btn btn-primary">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="selectedCar">
+        <h2>Edit Car</h2>
+        <form (ngSubmit)="updateCar()">
+          <div class="form-group">
+            <label for="owner_jmbg">Owner JMBG</label>
+            <input type="text" class="form-control" id="owner_jmbg" [(ngModel)]="selectedCar.owner_jmbg" name="owner_jmbg" required>
+          </div>
+          <div class="form-group">
+            <label for="make">Make</label>
+            <input type="text" class="form-control" id="make" [(ngModel)]="selectedCar.make" name="make" required>
+          </div>
+          <div class="form-group">
+            <label for="model">Model</label>
+            <input type="text" class="form-control" id="model" [(ngModel)]="selectedCar.model" name="model" required>
+          </div>
+          <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" class="form-control" id="year" [(ngModel)]="selectedCar.year" name="year" required>
+          </div>
+          <div class="form-group">
+            <label for="license_plate">License Plate</label>
+            <input type="text" class="form-control" id="license_plate" [(ngModel)]="selectedCar.license_plate" name="license_plate" required>
+          </div>
+          <button type="submit" class="btn btn-success">Update Car</button>
+          <button type="button" class="btn btn-secondary" (click)="selectedCar = null">Cancel</button>
+        </form>
+      </div>
+    </div>
+    <div>
+      <h2>Registracije</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Cars licence plate</th>
+            <th scope="col">issuing_date</th>
+            <th scope="col">valid_until_date</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let registration of registrations; let i = index">
             <th scope="row">{{ i + 1 }}</th>
-            <td>{{ registration.name }}</td>
-            <td>{{ registration.issuing_date }}</td>
-            <td>{{ registration.valid_until_date }}</td>
+            <td>{{  getCarLicensePlate(registration.car_id)}}</td>
+            <td>{{ registration.issuing_date}}</td>
+            <td>{{ registration.valid_until_date}}</td>
+            <td>
+              <button (click)="deleteRegistration(registration.id)" class="btn btn-danger">Delete</button>
+              <button (click)="editRegistration(registration)" class="btn btn-primary">Edit</button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-    
+   <!-- Registration Edit Form -->
+  <form *ngIf="editingRegistration" (ngSubmit)="updateRegistration()">
+    <div class="form-group">
+      <label for="car_id">Car ID</label>
+      <input type="text" class="form-control" id="car_id" [(ngModel)]="editingRegistration.car_id" name="car_id" required>
+    </div>
+    <div class="form-group">
+      <label for="issuing_date">Issuing Date</label>
+      <input type="date" class="form-control" id="issuing_date" [(ngModel)]="editingRegistration.issuing_date" name="issuing_date" required>
+    </div>
+    <div class="form-group">
+      <label for="valid_until_date">Valid Until Date</label>
+      <input type="date" class="form-control" id="valid_until_date" [(ngModel)]="editingRegistration.valid_until_date" name="valid_until_date" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Registration</button>
+  </form>
     <div>
       <h2>Vozacke Dozvole</h2>
       <table class="table">
@@ -34,6 +111,7 @@
             <th scope="col">Adresa</th>
             <th scope="col">Poeni</th>
             <th scope="col">je Vazeca</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -45,9 +123,45 @@
             <td>{{ licence.address }}</td>
             <td>{{ licence.points }}</td>
             <td>{{ licence.is_valid}}</td>
+            <td>
+              <button (click)="deleteLicense(licence.id)" class="btn btn-danger">Delete</button>
+              <button (click)="editLicense(licence)" class="btn btn-primary">Edit</button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
     </div>
-    
+
+     <!-- License Edit Form -->
+  <form *ngIf="editingLicense" (ngSubmit)="updateLicense()">
+    <div class="form-group">
+      <label for="user_jmbg">User JMBG</label>
+      <input type="text" class="form-control" id="user_jmbg" [(ngModel)]="editingLicense.user_jmbg" name="user_jmbg" required>
+    </div>
+    <div class="form-group">
+      <label for="category">Category</label>
+      <input type="text" class="form-control" id="category" [(ngModel)]="editingLicense.category" name="category" required>
+    </div>
+    <div class="form-group">
+      <label for="issuing_date">Issuing Date</label>
+      <input type="date" class="form-control" id="issuing_date" [(ngModel)]="editingLicense.issuing_date" name="issuing_date" required>
+    </div>
+    <div class="form-group">
+      <label for="valid_until_date">Valid Until Date</label>
+      <input type="date" class="form-control" id="valid_until_date" [(ngModel)]="editingLicense.valid_until_date" name="valid_until_date" required>
+    </div>
+    <div class="form-group">
+      <label for="address">Address</label>
+      <input type="text" class="form-control" id="address" [(ngModel)]="editingLicense.address" name="address">
+    </div>
+    <div class="form-group">
+      <label for="points">Points</label>
+      <input type="number" class="form-control" id="points" [(ngModel)]="editingLicense.points" name="points">
+    </div>
+    <div class="form-group">
+      <label for="is_valid">Is Valid</label>
+      <input type="checkbox" id="is_valid" [(ngModel)]="editingLicense.is_valid" name="is_valid">
+    </div>
+    <button type="submit" class="btn btn-primary">Update License</button>
+  </form>
