@@ -1,0 +1,62 @@
+/* Container for centering the forms and distributing them horizontally */
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap to a new line if there is not enough space */
+    justify-content: space-between; /* Distributes forms with space between them */
+    align-items: flex-start; /* Aligns items at the start of the container */
+    margin: 20px auto; /* Centers the container itself */
+    max-width: 1200px; /* Sets a maximum width for the container */
+    min-height: 80vh; /* Ensures the container takes up at least 80% of the viewport height */
+  }
+  
+  /* Style for each form container */
+  .form-container {
+    flex: 1 1 300px; /* Allows the form container to grow, shrink, and sets a base width */
+    margin: 10px; /* Adds margin around each form container */
+    padding: 20px;
+    border: 1px solid #ddd; /* Adds a border around each form container */
+    border-radius: 8px; /* Rounds the corners of the form containers */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    background-color: #fff; /* Sets a white background color for the form containers */
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+  }
+  
+  /* Specific styling for alignment */
+  .get-user-by-jmbg {
+    margin-right: auto; /* Pushes this form container to the left */
+  }
+  
+  .get-licenses-by-jmbg {
+    margin-left: auto; /* Pushes this form container to the right */
+  }
+  
+  h2 {
+    text-align: center;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  label, input, button {
+    margin: 5px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  th, td {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
