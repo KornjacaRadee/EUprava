@@ -130,25 +130,6 @@ func GetVehicleByIDHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(vehicle)
 }
 
-// GetLicencesByUserID retrieves licenses by user ID
-func GetLicencesByUserID(dbClient *mongo.Client) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		userID, err := primitive.ObjectIDFromHex(mux.Vars(r)["id"])
-		if err != nil {
-			http.Error(w, "Invalid userID", http.StatusBadRequest)
-			return
-		}
-
-		licences, err := data.GetLicencesByUserID(dbClient, userID)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		json.NewEncoder(w).Encode(licences)
-	}
-}
-
 // GetVehicleByRegistrationHandler handles requests to retrieve a vehicle by its registration
 func GetVehicleByRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
@@ -224,6 +205,7 @@ func GetCarsByUserIDHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Println("Fetching cars for user ID:", userID) // Log the user ID being queried
 	cars, err := data.GetCarsByUserID(userID)
 	if err != nil {
 		log.Println("Error retrieving cars by user ID:", err)
@@ -231,7 +213,7 @@ func GetCarsByUserIDHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Respond with the retrieved cars
+	log.Println("Cars retrieved:", cars) // Log the retrieved cars
 	json.NewEncoder(w).Encode(cars)
 }
 
@@ -314,36 +296,58 @@ func UpdateCarHandler(w http.ResponseWriter, r *http.Request) {
 
 // UpdateRegistrationHandler handles requests to update a registration
 func UpdateRegistrationHandler(w http.ResponseWriter, r *http.Request) {
-    var registration data.RegisterVehicle
-    err := json.NewDecoder(r.Body).Decode(&registration)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusBadRequest)
-        return
-    }
+	var registration data.RegisterVehicle
+	err := json.NewDecoder(r.Body).Decode(&registration)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
-    err = data.UpdateRegistration(&registration)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
+	err = data.UpdateRegistration(&registration)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-    w.WriteHeader(http.StatusNoContent) // 204 No Content
+	w.WriteHeader(http.StatusNoContent) // 204 No Content
 }
 
 // UpdateLicenseHandler handles requests to update a license
 func UpdateLicenseHandler(w http.ResponseWriter, r *http.Request) {
-    var license data.License
-    err := json.NewDecoder(r.Body).Decode(&license)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusBadRequest)
-        return
-    }
+	var license data.License
+	err := json.NewDecoder(r.Body).Decode(&license)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
-    err = data.UpdateLicense(&license)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
+	err = data.UpdateLicense(&license)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-    w.WriteHeader(http.StatusNoContent) // 204 No Content
+	w.WriteHeader(http.StatusNoContent) // 204 No Content
+}
+
+// GetLicencesByUserID retrieves licenses by user ID
+func GetLicencesByUserID(dbClient *mongo.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		userID, err := primitive.ObjectIDFromHex(mux.Vars(r)["id"])
+		if err != nil {
+			http.Error(w, "Invalid userID", http.StatusBadRequest)
+			return
+		}
+
+		log.Println("Fetching licenses for user ID:", userID) // Log the user ID being queried
+		licences, err := data.GetLicencesByUserID(dbClient, userID)
+		if err != nil {
+			log.Println("Error retrieving licenses by user ID:", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		log.Println("Licenses retrieved:", licences) // Log the retrieved licenses
+		json.NewEncoder(w).Encode(licences)
+	}
 }

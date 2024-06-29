@@ -12,6 +12,7 @@ import { TrafficPoliceComponent } from './traffic-police.service/traffic-police.
 import { MupvozilaComponent } from './mupvozila/mupvozila.component';
 import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
 
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 const routes: Routes = [
   {
     path: '',
@@ -52,6 +53,10 @@ const routes: Routes = [
     path: 'mupvozila-home',
     component: MupvozilaHomeComponent,
 
+  },
+  { 
+    path: 'user-dashboard', 
+    component: UserDashboardComponent
   }
 
 

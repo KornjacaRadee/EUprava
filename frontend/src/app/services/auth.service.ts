@@ -83,6 +83,14 @@ export class AuthService {
     return "";
   }
 
+  getUserJMBG(): string {
+    const token = this.getAuthToken();
+    if (token) {
+      const decodedToken = this.helper.decodeToken(token);
+      return decodedToken.jmbg; // Ensure jmbg is included in the token payload
+    }
+    return '';
+  }
 
   // decodeToken(token: string): any {
   //   try {
