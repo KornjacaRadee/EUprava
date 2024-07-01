@@ -1,7 +1,7 @@
-<!-- traffic-police.component.html -->
+
 <div class="container mt-4">
   <div class="row">
-    <<h2>Kreiranje Nesreće</h2>
+    <h2>Kreiranje Nesreće</h2>
     <form (ngSubmit)="createNesreca()">
       <div class="form-group">
         <label for="nesrecaLocation">Lokacija:</label>
@@ -41,6 +41,7 @@
         <input type="text" class="form-control" id="prekrsajDescription" [(ngModel)]="prekrsajData.opis" name="opis" required>
       </div>
       <button type="submit" class="btn btn-primary">Kreiraj Prekršaj</button>
+      <button class="btn btn-primary" (click)="navigateToTrafficPoliceData()">Go to Traffic Police Data</button>
     </form>
   </div>
   <div class="col">
