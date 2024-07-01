@@ -345,6 +345,29 @@ func UpdateRegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent) // 204 No Content
 }
 
+// GetCarByLicensePlateHandler vraća automobil na osnovu registracionih tablica
+func GetCarByLicensePlateHandler(dbClient *mongo.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		params := mux.Vars(r)
+		licensePlate := params["license_plate"]
+
+		car, err := data.GetCarByLicensePlate(r.Context(), licensePlate)
+		if err != nil {
+			if err.Error() == "car with license plate "+licensePlate+" not found" {
+				http.Error(w, err.Error(), http.StatusNotFound)
+			} else {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(car); err != nil {
+			http.Error(w, "Error encoding response", http.StatusInternalServerError)
+		}
+	}
+}
+
 // UpdateLicenseHandler handles requests to update a license
 func UpdateLicenseHandler(w http.ResponseWriter, r *http.Request) {
 	var license data.License

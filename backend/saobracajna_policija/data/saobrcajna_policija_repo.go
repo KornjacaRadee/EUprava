@@ -10,12 +10,16 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"saobracajna_policija/client"
+
 )
 
 type SaobracajnaPolicijaRepo struct {
 	cli    *mongo.Client
 	logger *log.Logger
 	client *http.Client
+	mupVozilaClient *client.MupvozilaClient
+	authClient       *client.AuthClient
 }
 
 var (
@@ -24,16 +28,18 @@ var (
 	dbName = os.Getenv("SAOBRACAJNA_POLICIJA_DB_NAME")
 )
 
-func NewSaobracajnaPolicijaRepo(ctx context.Context, logger *log.Logger) *SaobracajnaPolicijaRepo {
+func NewSaobracajnaPolicijaRepo(ctx context.Context, logger *log.Logger, mupVozilaClient *client.MupvozilaClient, authClient *client.AuthClient) *SaobracajnaPolicijaRepo {
 	dburi := fmt.Sprintf("mongodb://%s:%s/", dbHost, dbPort)
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(dburi))
 	if err != nil {
+		logger.Fatal("Failed to create MongoDB client: ", err)
 		return nil
 	}
 
 	err = client.Connect(ctx)
 	if err != nil {
+		logger.Fatal("Failed to connect to MongoDB: ", err)
 		return nil
 	}
 
@@ -45,13 +51,43 @@ func NewSaobracajnaPolicijaRepo(ctx context.Context, logger *log.Logger) *Saobra
 		},
 	}
 
-	// Return repository with logger and DB client
 	return &SaobracajnaPolicijaRepo{
-		cli:    client,
-		logger: logger,
-		client: httpClient,
+		cli:             client,
+		logger:          logger,
+		client:          httpClient,
+		mupVozilaClient: mupVozilaClient,
+		authClient:      authClient,
 	}
 }
+
+func (pr *SaobracajnaPolicijaRepo) GetAllCars(ctx context.Context) ([]client.Car, error) {
+    cars, err := pr.mupVozilaClient.GetAllCars()
+    if err != nil {
+        return nil, err
+    }
+    return cars, nil
+}
+func (pr *SaobracajnaPolicijaRepo) GetLicensesByUserJMBG(ctx context.Context, jmbg string) ([]client.License, error) {
+    licenses, err := pr.mupVozilaClient.GetLicensesByUserJMBG(jmbg)
+    if err != nil {
+        return nil, err
+    }
+    return licenses, nil
+}
+
+func (r *SaobracajnaPolicijaRepo) GetUserByJMBG(ctx context.Context, jmbg string) (*client.User, error) {
+    return r.authClient.GetUserByJMBG(ctx, jmbg)
+}
+
+func (pr *SaobracajnaPolicijaRepo) GetCarByLicensePlate(ctx context.Context, licensePlate string) (*client.Car, error) {
+	car, err := pr.mupVozilaClient.GetCarByLicensePlate(licensePlate)
+	if err != nil {
+		return nil, err
+	}
+	return car, nil
+}
+
+
 
 func (pr *SaobracajnaPolicijaRepo) CreateNesreca(ctx context.Context, nesreca *Nesreca) error {
 	collection := pr.cli.Database(dbName).Collection("nesrece")
@@ -87,6 +123,33 @@ func (pr *SaobracajnaPolicijaRepo) GetNesrece(ctx context.Context) ([]Nesreca, e
 
 	return nesrece, nil
 }
+
+func (r *SaobracajnaPolicijaRepo) GetAllNesreceByVozac(ctx context.Context, vozac string) ([]Nesreca, error) {
+	collection := r.cli.Database(dbName).Collection("nesrece")
+	filter := bson.M{"vozac": vozac}
+
+	var nesrece []Nesreca
+	cursor, err := collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	for cursor.Next(ctx) {
+		var nesreca Nesreca
+		if err := cursor.Decode(&nesreca); err != nil {
+			return nil, err
+		}
+		nesrece = append(nesrece, nesreca)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return nesrece, nil
+}
+
 
 func (pr *SaobracajnaPolicijaRepo) GetPrekrsaji(ctx context.Context) ([]Prekrsaj, error) {
 	collection := pr.cli.Database(dbName).Collection("prekrsaji")

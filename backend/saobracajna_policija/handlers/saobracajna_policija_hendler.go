@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"saobracajna_policija/data"
+
 )
 
 type SaobracajnaPolicijaHandler struct {
@@ -15,10 +16,113 @@ type SaobracajnaPolicijaHandler struct {
 }
 
 func NewSaobracajnaPolicijaHandler(repo *data.SaobracajnaPolicijaRepo, logger *log.Logger) *SaobracajnaPolicijaHandler {
-	return &SaobracajnaPolicijaHandler{
-		repo:   repo,
-		logger: logger,
+    return &SaobracajnaPolicijaHandler{
+        repo:   repo,
+        logger: logger,
+    }
+}
+
+func (h *SaobracajnaPolicijaHandler) GetLicensesByUserJMBG(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    jmbg := vars["jmbg"]
+
+    licenses, err := h.repo.GetLicensesByUserJMBG(r.Context(), jmbg)
+    if err != nil {
+        http.Error(w, "Error retrieving licenses", http.StatusInternalServerError)
+        return
+    }
+
+    if licenses == nil {
+        http.NotFound(w, r)
+        return
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(licenses)
+}
+
+func (h *SaobracajnaPolicijaHandler) GetAllNesreceByVozac(w http.ResponseWriter, r *http.Request) {
+	vozac := mux.Vars(r)["vozac"]
+	nesrece, err := h.repo.GetAllNesreceByVozac(r.Context(), vozac)
+	if err != nil {
+		h.logger.Println("Error fetching accidents by driver:", err)
+		http.Error(w, "Error fetching accidents", http.StatusInternalServerError)
+		return
 	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(nesrece)
+}
+
+
+
+func (h *SaobracajnaPolicijaHandler) GetAllCars(w http.ResponseWriter, r *http.Request) {
+	cars, err := h.repo.GetAllCars(r.Context())
+	if err != nil {
+		http.Error(w, "Greška pri dobijanju vozila", http.StatusInternalServerError)
+		return
+	}
+
+	// Vraćanje odgovora sa JSON sadržajem
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(cars)
+}
+func (h *SaobracajnaPolicijaHandler) GetCarByLicensePlate(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    licensePlate := vars["license_plate"]
+
+    // Log the received license plate
+    h.logger.Printf("Received request for car with license plate: %s", licensePlate)
+
+    // Retrieve the car by license plate
+    car, err := h.repo.GetCarByLicensePlate(r.Context(), licensePlate)
+    if err != nil {
+        // Log the error for debugging
+        h.logger.Printf("Error retrieving car by license plate %s: %v", licensePlate, err)
+        http.Error(w, "Error retrieving car", http.StatusInternalServerError)
+        return
+    }
+
+    // Check if the car was found
+    if car == nil {
+        h.logger.Printf("Car with license plate %s not found", licensePlate)
+        http.NotFound(w, r)
+        return
+    }
+
+    // Set the content type to JSON
+    w.Header().Set("Content-Type", "application/json")
+
+    // Encode and send the car details as JSON
+    if err := json.NewEncoder(w).Encode(car); err != nil {
+        // Log the error and send an internal server error response
+        h.logger.Printf("Error encoding car to JSON: %v", err)
+        http.Error(w, "Error encoding car to JSON", http.StatusInternalServerError)
+        return
+    }
+}
+
+func (h *SaobracajnaPolicijaHandler) GetUserByJMBG(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    jmbg := vars["jmbg"]
+
+    user, err := h.repo.GetUserByJMBG(r.Context(), jmbg)
+    if err != nil {
+        h.logger.Printf("Error retrieving user by JMBG %s: %v", jmbg, err)
+        http.Error(w, "Error retrieving user", http.StatusInternalServerError)
+        return
+    }
+
+    if user == nil {
+        http.NotFound(w, r)
+        return
+    }
+
+    w.Header().Set("Content-Type", "application/json")
+    if err := json.NewEncoder(w).Encode(user); err != nil {
+        h.logger.Printf("Error encoding user to JSON: %v", err)
+        http.Error(w, "Error encoding user to JSON", http.StatusInternalServerError)
+        return
+    }
 }
 
 func (h *SaobracajnaPolicijaHandler) CreateNesreca(w http.ResponseWriter, r *http.Request) {

@@ -68,8 +68,10 @@ func main() {
  // New routes for updating registrations and licenses
     r.HandleFunc("/registrations/{id}", mupVozilaHandlers.UpdateRegistrationHandler).Methods("PUT")
     r.HandleFunc("/licenses/{id}", mupVozilaHandlers.UpdateLicenseHandler).Methods("PUT")
+    r.HandleFunc("/car/carPlate/{license_plate}", mupVozilaHandlers.GetCarByLicensePlateHandler(dbClient)).Methods("GET")
 
-	r.HandleFunc("/updateLicenseValidity/user/{id}/category/{category}", mupVozilaHandlers.UpdateLicenseValidityHandler(dbClient)).Methods("POST")
+    r.HandleFunc("/updateLicenseValidity/user/{id}/category/{category}", mupVozilaHandlers.UpdateLicenseValidityHandler(dbClient)).Methods("POST")
+
 
 
 	// CORS setup
