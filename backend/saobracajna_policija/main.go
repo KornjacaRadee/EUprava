@@ -61,6 +61,10 @@ func main() {
     router.HandleFunc("/nesreca/{id}", handler.DeleteNesreca).Methods(http.MethodDelete)
     router.HandleFunc("/prekrsaj/{id}", handler.DeletePrekrsaj).Methods(http.MethodDelete)
 
+    router.HandleFunc("/nesrece/vozac/{vozac}", handler.GetAllNesreceByVozac).Methods(http.MethodGet)
+
+
+
     router.HandleFunc("/cars", handler.GetAllCars).Methods(http.MethodGet)
     router.HandleFunc("/licenses/user/{jmbg}", handler.GetLicensesByUserJMBG).Methods(http.MethodGet)
     router.HandleFunc("/cars/plate/{license_plate}", handler.GetCarByLicensePlate).Methods(http.MethodGet)

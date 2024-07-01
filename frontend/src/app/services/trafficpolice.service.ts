@@ -21,6 +21,8 @@ export class TrafficPoliceService {
 
   private _getLicensesByUserJMBGUrl = this._courtUrl + '/licenses/user/{jmbg}';
 
+  private _getNesreceByVozacUrl = this._courtUrl + '/nesrece/vozac/{vozac}';
+
   private _getAllCarsUrl = this._courtUrl + '/cars';
 
   constructor(private http: HttpClient) { }
@@ -69,4 +71,11 @@ export class TrafficPoliceService {
   getAllCars(): Observable<any> {
     return this.http.get(this._getAllCarsUrl);
   }
+
+  getNesreceByVozac(vozac: string): Observable<any> {
+    const url = `${this._getNesreceByVozacUrl.replace('{vozac}', vozac)}`;
+    return this.http.get(url);
+  }
+
+
 }

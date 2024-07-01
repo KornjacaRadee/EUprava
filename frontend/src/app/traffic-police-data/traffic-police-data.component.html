@@ -1,106 +1,133 @@
 <div class="container">
-    <div class="form-container">
+  <div class="form-container get-user-by-jmbg">
       <h2>Get User By JMBG</h2>
       <form (ngSubmit)="getUserByJMBG()">
-        <label for="jmbg">JMBG:</label>
-        <input type="text" id="jmbg" [(ngModel)]="jmbg" name="jmbg" required>
-        <button type="submit">Get User</button>
+          <label for="jmbg">JMBG:</label>
+          <input type="text" id="jmbg" [(ngModel)]="jmbg" name="jmbg" required>
+          <button type="submit">Get User</button>
       </form>
       <div *ngIf="userData">
-        <h3>User Data:</h3>
-        <table>
-          <tr>
-            <th>ID</th>
-            <th>JMBG</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Email</th>
-          </tr>
-          <tr>
-            <td>{{ userData.id }}</td>
-            <td>{{ userData.jmbg }}</td>
-            <td>{{ userData.name }}</td>
-            <td>{{ userData.surname }}</td>
-            <td>{{ userData.email }}</td>
-          </tr>
-        </table>
+          <h3>User Data:</h3>
+          <table>
+              <tr>
+                  <th>ID</th>
+                  <th>JMBG</th>
+                  <th>Name</th>
+                  <th>Surname</th>
+                  <th>Email</th>
+              </tr>
+              <tr>
+                  <td>{{ userData.id }}</td>
+                  <td>{{ userData.jmbg }}</td>
+                  <td>{{ userData.name }}</td>
+                  <td>{{ userData.surname }}</td>
+                  <td>{{ userData.email }}</td>
+              </tr>
+          </table>
       </div>
-    </div>
-  
-    <div class="form-container">
+  </div>
+
+  <div class="form-container">
       <h2>Get Car By License Plate</h2>
       <form (ngSubmit)="getCarByLicensePlate()">
-        <label for="licensePlate">License Plate:</label>
-        <input type="text" id="licensePlate" [(ngModel)]="licensePlate" name="licensePlate" required>
-        <button type="submit">Get Car</button>
+          <label for="licensePlate">License Plate:</label>
+          <input type="text" id="licensePlate" [(ngModel)]="licensePlate" name="licensePlate" required>
+          <button type="submit">Get Car</button>
       </form>
       <div *ngIf="carData">
-        <h3>Car Data:</h3>
-        <table>
-          <tr>
-            <th>ID</th>
-            <th>License Plate</th>
-            <th>Model</th>
-            <th>Owner</th>
-            <th>Year</th>
-          </tr>
-          <tr>
-            <td>{{ carData.id }}</td>
-            <td>{{ carData.license_plate }}</td>
-            <td>{{ carData.model }}</td>
-            <td>{{ carData.owner }}</td>
-            <td>{{ carData.year }}</td>
-          </tr>
-        </table>
+          <h3>Car Data:</h3>
+          <table>
+              <tr>
+                  <th>ID</th>
+                  <th>License Plate</th>
+                  <th>Model</th>
+                  <th>Owner</th>
+                  <th>Year</th>
+              </tr>
+              <tr>
+                  <td>{{ carData.id }}</td>
+                  <td>{{ carData.license_plate }}</td>
+                  <td>{{ carData.model }}</td>
+                  <td>{{ carData.owner }}</td>
+                  <td>{{ carData.year }}</td>
+              </tr>
+          </table>
       </div>
-    </div>
-  
-    <div class="form-container">
+  </div>
+
+  <div class="form-container get-licenses-by-jmbg">
       <h2>Get Licenses By User JMBG</h2>
       <form (ngSubmit)="getLicensesByUserJMBG()">
-        <label for="licenseJMBG">JMBG:</label>
-        <input type="text" id="licenseJMBG" [(ngModel)]="jmbg" name="jmbg" required>
-        <button type="submit">Get Licenses</button>
+          <label for="licenseJMBG">JMBG:</label>
+          <input type="text" id="licenseJMBG" [(ngModel)]="jmbg" name="jmbg" required>
+          <button type="submit">Get Licenses</button>
       </form>
       <div *ngIf="licensesData">
-        <h3>Licenses Data:</h3>
-        <table>
-          <tr>
-            <th>License ID</th>
-            <th>Category</th>
-            <th>Expiry Date</th>
-          </tr>
-          <tr *ngFor="let license of licensesData">
-            <td>{{ license.id }}</td>
-            <td>{{ license.category }}</td>
-            <td>{{ license.expiry_date }}</td>
-          </tr>
-        </table>
+          <h3>Licenses Data:</h3>
+          <table>
+              <tr>
+                  <th>License ID</th>
+                  <th>Category</th>
+                  <th>Expiry Date</th>
+              </tr>
+              <tr *ngFor="let license of licensesData">
+                  <td>{{ license.id }}</td>
+                  <td>{{ license.category }}</td>
+                  <td>{{ license.expiry_date }}</td>
+              </tr>
+          </table>
       </div>
-    </div>
-  
-    <div class="form-container">
+  </div>
+
+  <div class="form-container">
       <h2>Get All Cars</h2>
       <button (click)="getAllCars()">Get All Cars</button>
       <div *ngIf="allCarsData">
-        <h3>All Cars Data:</h3>
-        <table>
-          <tr>
-            <th>ID</th>
-            <th>License Plate</th>
-            <th>Model</th>
-            <th>Owner</th>
-            <th>Year</th>
-          </tr>
-          <tr *ngFor="let car of allCarsData">
-            <td>{{ car.id }}</td>
-            <td>{{ car.license_plate }}</td>
-            <td>{{ car.model }}</td>
-            <td>{{ car.owner }}</td>
-            <td>{{ car.year }}</td>
-          </tr>
-        </table>
+          <h3>All Cars Data:</h3>
+          <table>
+              <tr>
+                  <th>ID</th>
+                  <th>License Plate</th>
+                  <th>Model</th>
+                  <th>Owner</th>
+                  <th>Year</th>
+              </tr>
+              <tr *ngFor="let car of allCarsData">
+                  <td>{{ car.id }}</td>
+                  <td>{{ car.license_plate }}</td>
+                  <td>{{ car.model }}</td>
+                  <td>{{ car.owner }}</td>
+                  <td>{{ car.year }}</td>
+              </tr>
+          </table>
       </div>
-    </div>
   </div>
-  
+
+  <div class="form-container">
+      <h2>Get All Accidents By Driver</h2>
+      <form (ngSubmit)="getNesreceByVozac()">
+          <label for="vozac">Driver:</label>
+          <input type="text" id="vozac" [(ngModel)]="vozac" name="vozac" required>
+          <button type="submit">Get Accidents</button>
+      </form>
+      <div *ngIf="nesreceData">
+          <h3>Accidents Data:</h3>
+          <table>
+              <tr>
+                  <th>ID</th>
+                  <th>Location</th>
+                  <th>Vehicle</th>
+                  <th>Driver</th>
+                  <th>Description</th>
+              </tr>
+              <tr *ngFor="let nesreca of nesreceData">
+                  <td>{{ nesreca.id }}</td>
+                  <td>{{ nesreca.lokacija }}</td>
+                  <td>{{ nesreca.vozilo }}</td>
+                  <td>{{ nesreca.vozac }}</td>
+                  <td>{{ nesreca.opis }}</td>
+              </tr>
+          </table>
+      </div>
+  </div>
+</div>

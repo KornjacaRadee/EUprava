@@ -13,6 +13,9 @@ export class TrafficPoliceDataComponent {
   carData: any;
   licensesData: any;
   allCarsData: any;
+  nesreceData: any;
+  vozac: string = '';
+
 
   constructor(private trafficPoliceService: TrafficPoliceService) { }
 
@@ -37,6 +40,12 @@ export class TrafficPoliceDataComponent {
   getAllCars() {
     this.trafficPoliceService.getAllCars().subscribe(data => {
       this.allCarsData = data;
+    });
+  }
+
+  getNesreceByVozac() {
+    this.trafficPoliceService.getNesreceByVozac(this.vozac).subscribe(data => {
+      this.nesreceData = data;
     });
   }
 

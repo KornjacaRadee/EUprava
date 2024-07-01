@@ -124,6 +124,33 @@ func (pr *SaobracajnaPolicijaRepo) GetNesrece(ctx context.Context) ([]Nesreca, e
 	return nesrece, nil
 }
 
+func (r *SaobracajnaPolicijaRepo) GetAllNesreceByVozac(ctx context.Context, vozac string) ([]Nesreca, error) {
+	collection := r.cli.Database(dbName).Collection("nesrece")
+	filter := bson.M{"vozac": vozac}
+
+	var nesrece []Nesreca
+	cursor, err := collection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	for cursor.Next(ctx) {
+		var nesreca Nesreca
+		if err := cursor.Decode(&nesreca); err != nil {
+			return nil, err
+		}
+		nesrece = append(nesrece, nesreca)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return nesrece, nil
+}
+
+
 func (pr *SaobracajnaPolicijaRepo) GetPrekrsaji(ctx context.Context) ([]Prekrsaj, error) {
 	collection := pr.cli.Database(dbName).Collection("prekrsaji")
 

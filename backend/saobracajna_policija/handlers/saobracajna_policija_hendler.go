@@ -41,6 +41,19 @@ func (h *SaobracajnaPolicijaHandler) GetLicensesByUserJMBG(w http.ResponseWriter
     json.NewEncoder(w).Encode(licenses)
 }
 
+func (h *SaobracajnaPolicijaHandler) GetAllNesreceByVozac(w http.ResponseWriter, r *http.Request) {
+	vozac := mux.Vars(r)["vozac"]
+	nesrece, err := h.repo.GetAllNesreceByVozac(r.Context(), vozac)
+	if err != nil {
+		h.logger.Println("Error fetching accidents by driver:", err)
+		http.Error(w, "Error fetching accidents", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(nesrece)
+}
+
+
 
 func (h *SaobracajnaPolicijaHandler) GetAllCars(w http.ResponseWriter, r *http.Request) {
 	cars, err := h.repo.GetAllCars(r.Context())
