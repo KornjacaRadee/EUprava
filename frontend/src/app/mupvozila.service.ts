@@ -112,4 +112,8 @@ export class MupvozilaService {
     console.log('Requesting licenses for user:', userId);
     return this.http.get<any>(`${this.configService._mup_vozila_url}/licenses/user/${userId}`);
   }
+
+  getAccidentsByDriver(driverId: string): Observable<any> {
+    return this.http.get(`${this.configService._mup_vozila_url}/nesrece/vozac/${driverId}`);
+  }
 }
