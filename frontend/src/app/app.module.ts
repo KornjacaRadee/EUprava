@@ -22,6 +22,8 @@ import { TrafficPoliceComponent } from './traffic-police.service/traffic-police.
 
 import { MupvozilaComponent } from './mupvozila/mupvozila.component';
 import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police-data.component';
 
 
 @NgModule({
@@ -41,7 +43,9 @@ import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.componen
     
 
     MupvozilaComponent,
-    MupvozilaHomeComponent
+    MupvozilaHomeComponent,
+    UserDashboardComponent,
+    TrafficPoliceDataComponent
 
 
   ],

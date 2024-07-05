@@ -2,6 +2,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { TrafficPoliceService } from '../services/trafficpolice.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-traffic-police',
@@ -14,11 +15,16 @@ export class TrafficPoliceComponent implements OnInit {
   prekrsajData: any = { lokacija: '', vozac: '', vozilo: '', opis: '' };
   nesrecaData: any = { lokacija: '', vozac: '', vozilo: '', opis: '' };
 
-  constructor(private trafficPoliceService: TrafficPoliceService) { }
+
+  constructor(private trafficPoliceService: TrafficPoliceService , private router: Router) { }
 
   ngOnInit(): void {
     this.getPrekrsaji();
     this.getNesrece();
+  }
+
+  navigateToTrafficPoliceData() {
+    this.router.navigate(['/traffic-police-data']);
   }
 
   getPrekrsaji(): void {

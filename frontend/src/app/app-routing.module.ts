@@ -11,7 +11,8 @@ import { TrafficPoliceComponent } from './traffic-police.service/traffic-police.
 
 import { MupvozilaComponent } from './mupvozila/mupvozila.component';
 import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
-
+import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police-data.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 const routes: Routes = [
   {
     path: '',
@@ -48,10 +49,16 @@ const routes: Routes = [
     path: 'mupvozila',
     component: MupvozilaComponent,
   },
+
+  { path: 'traffic-police-data', component: TrafficPoliceDataComponent },
   {
     path: 'mupvozila-home',
     component: MupvozilaHomeComponent,
 
+  },
+  { 
+    path: 'user-dashboard', 
+    component: UserDashboardComponent
   }
 
 

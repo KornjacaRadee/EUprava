@@ -9,12 +9,14 @@ export class ConfigService {
   _api_url: string;
   _auth_url: string;
   _register_url: string;
+  _get_user: string;
 
 
   _login_url: string;
   _court_url: string;
 
   _create_entity: string;
+  _create_request: string;
   _get_user_entities: string;
   _get_entity: string;
 
@@ -38,6 +40,9 @@ export class ConfigService {
   _getAllVehicles: string ;
   _getLicenceById: string ;
   _getVehicleById: string ;
+  _getLicenceByJMBG: string;
+  _update_vehicle: string;
+
 
 
   _create_nesreca: string;
@@ -64,8 +69,11 @@ export class ConfigService {
 
     this._login_url = this._auth_url + '/api/auth/login';
 
+    this._get_user = this._auth_url + '/api/auth/users/';
+
 //COURT ROUTES
 
+  this._create_request = this._court_url + '/legal_requests';
     this._create_entity = this._court_url + '/legal_entities';
     this._get_user_entities = this._court_url + '/legal_entities/user/';
     this._get_entity = this._court_url + '/legal_entities/';
@@ -90,18 +98,15 @@ export class ConfigService {
 
 // MUP VOZILA ROUTES
 
-
     this._create_licences = this._mup_vozila_url + '/licenses';
-    this._create_vehicles = this._mup_vozila_url + '/vehicles';
+    this._create_vehicles = this._mup_vozila_url + '/cars';
     this._getAllLicences = this._mup_vozila_url + '/getAllLicenses';
-    this._getAllVehicles = this._mup_vozila_url + '/getAllVehicles';
+    this._getAllVehicles = this._mup_vozila_url + '/getAllCars';
     this._getLicenceById = this._mup_vozila_url + '/getLicenseById/user/';
     this._getVehicleById = this._mup_vozila_url + '/getVehicleById/user/';
 
-
-
-
-
+    this._getLicenceByJMBG = this._mup_vozila_url + '/licenses/user';
+    this._update_vehicle = this._mup_vozila_url + '/cars/';
 
 
 

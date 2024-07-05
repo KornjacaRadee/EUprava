@@ -22,6 +22,10 @@ export class CourtService {
     return this.http.post(`${this.configService._create_entity}`, entity);
   }
 
+  createRequest(entity: any): Observable<any> {
+    return this.http.post(`${this.configService._create_request}`, entity);
+  }
+
   getUserEntities(id: string): Observable<any> {
     return this.http.get(`${this.configService._get_user_entities}`+id);
   }
@@ -33,6 +37,8 @@ export class CourtService {
   getUserWarrants(id: string): Observable<any> {
     return this.http.get(`${this.configService._get_user_warrant}`+id);
   }
+
+
 
   createWarrant(warrant: any): Observable<any> {
     return this.http.post(`${this.configService._create_warrant}`, warrant);
