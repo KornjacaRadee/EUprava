@@ -39,6 +39,21 @@ type SearchWarrantRequest struct {
 	JMBG        string             `json:"jmbg"`
 	Address     string             `bson:"address" json:"address"`
 }
+type Hearing struct {
+	ID            primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Title         string             `bson:"title" json:"title"`
+	Description   string             `bson:"description" json:"description"`
+	ScheduledAt   time.Time          `bson:"scheduledAt" json:"scheduledAt"`
+	Duration      time.Duration      `bson:"duration" json:"duration"`
+	LegalEntityID primitive.ObjectID `bson:"legalEntityId" json:"legalEntityId"`
+}
+type LegalRequest struct {
+	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Title       string             `bson:"title" json:"title"`
+	UserJMBG    string             `bson:"userJMBG" json:"userJMBG"`
+	RequestDate time.Time          `bson:"requestDate" json:"requestDate"`
+	UserID      primitive.ObjectID `bson:"userId" json:"userId"`
+}
 
 func CreateLegalRequest(dbClient *mongo.Client, saobracajClient *client.SaobracajnaPolicijaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -498,4 +513,40 @@ func getRoleFromToken(r *http.Request) (string, error) {
 	}
 
 	return role, nil
+}
+func GetAllHouseSearchWarrants(dbClient *mongo.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		houseSearchWarrants, err := data.GetAllHouseSearchWarrants(dbClient)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(houseSearchWarrants)
+	}
+}
+func GetAllHearings(dbClient *mongo.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		hearings, err := data.GetAllHearings(dbClient)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(hearings)
+	}
+}
+func GetAllLegalRequests(dbClient *mongo.Client) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		legalRequests, err := data.GetAllLegalRequests(dbClient)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(legalRequests)
+	}
 }

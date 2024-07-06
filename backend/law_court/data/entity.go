@@ -246,3 +246,43 @@ func GetHearing(dbClient *mongo.Client, id primitive.ObjectID) (*Hearing, error)
 
 	return &hearing, nil
 }
+func GetAllHouseSearchWarrants(dbClient *mongo.Client) ([]HouseSearchWarrant, error) {
+	collection := dbClient.Database("authDB").Collection("house_search_warrants")
+
+	var warrants []HouseSearchWarrant
+	cursor, err := collection.Find(context.Background(), bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var warrant HouseSearchWarrant
+		if err := cursor.Decode(&warrant); err != nil {
+			return nil, err
+		}
+		warrants = append(warrants, warrant)
+	}
+
+	return warrants, nil
+}
+func GetAllHearings(dbClient *mongo.Client) ([]Hearing, error) {
+	collection := dbClient.Database("authDB").Collection("hearings")
+
+	var hearings []Hearing
+	cursor, err := collection.Find(context.Background(), bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var hearing Hearing
+		if err := cursor.Decode(&hearing); err != nil {
+			return nil, err
+		}
+		hearings = append(hearings, hearing)
+	}
+
+	return hearings, nil
+}
