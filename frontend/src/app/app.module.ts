@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import {HTTP_INTERCEPTORS}from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CourtHomeComponent } from './court-home/court-home.component';
@@ -24,6 +25,7 @@ import { MupvozilaComponent } from './mupvozila/mupvozila.component';
 import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police-data.component';
+import { TokeninterceptorInterceptor } from './services/interceptors/tokeninterceptor.interceptor';
 
 
 @NgModule({
@@ -36,11 +38,11 @@ import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police
     CreateLawEtititiesComponent,
 
     TrafficPoliceComponent,
-    
-    
-    
-    
-    
+
+
+
+
+
 
     MupvozilaComponent,
     MupvozilaHomeComponent,
@@ -59,7 +61,13 @@ import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police
     ReactiveFormsModule,
     NgbModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokeninterceptorInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
