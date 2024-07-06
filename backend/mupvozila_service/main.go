@@ -57,6 +57,7 @@ func main() {
 	r.HandleFunc("/getLicenseById/{id}", mupVozilaHandlers.GetLicenseByIDHandler).Methods("GET")
 	r.HandleFunc("/getVehicleById/{id}", mupVozilaHandlers.GetVehicleByIDHandler).Methods("GET")
 	r.HandleFunc("/getLicencesByUserID/user/{id}", mupVozilaHandlers.GetLicencesByUserID(dbClient)).Methods("GET")
+	r.HandleFunc("/updateLicenseValidity/user/{id}/category/{category}", mupVozilaHandlers.UpdateLicenseValidityHandler(dbClient)).Methods("GET")
 
 	// New route for retrieving vehicle by registration
 	r.HandleFunc("/vehicles/registration/{registration}", mupVozilaHandlers.GetVehicleByRegistrationHandler).Methods("GET")
@@ -64,15 +65,13 @@ func main() {
 	r.HandleFunc("/registrations", mupVozilaHandlers.GetAllRegistrationsHandler).Methods("GET")
 	r.HandleFunc("/registrations/{id}", mupVozilaHandlers.DeleteRegistrationHandler).Methods("DELETE")
 	r.HandleFunc("/vehicles/register", mupVozilaHandlers.RegisterVehicleHandler).Methods("POST")
-  
- // New routes for updating registrations and licenses
-    r.HandleFunc("/registrations/{id}", mupVozilaHandlers.UpdateRegistrationHandler).Methods("PUT")
-    r.HandleFunc("/licenses/{id}", mupVozilaHandlers.UpdateLicenseHandler).Methods("PUT")
-    r.HandleFunc("/car/carPlate/{license_plate}", mupVozilaHandlers.GetCarByLicensePlateHandler(dbClient)).Methods("GET")
 
-    r.HandleFunc("/updateLicenseValidity/user/{id}/category/{category}", mupVozilaHandlers.UpdateLicenseValidityHandler(dbClient)).Methods("POST")
+	// New routes for updating registrations and licenses
+	r.HandleFunc("/registrations/{id}", mupVozilaHandlers.UpdateRegistrationHandler).Methods("PUT")
+	r.HandleFunc("/licenses/{id}", mupVozilaHandlers.UpdateLicenseHandler).Methods("PUT")
+	r.HandleFunc("/car/carPlate/{license_plate}", mupVozilaHandlers.GetCarByLicensePlateHandler(dbClient)).Methods("GET")
 
-
+	r.HandleFunc("/updateLicenseValidity/user/{id}/category/{category}", mupVozilaHandlers.UpdateLicenseValidityHandler(dbClient)).Methods("POST")
 
 	// CORS setup
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})

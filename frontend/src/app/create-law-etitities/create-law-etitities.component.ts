@@ -50,6 +50,9 @@ export class CreateLawEtititiesComponent implements OnInit{
       issueDate: this.formatDatetimeLocal(this.entity.issueDate),
       dueToDate: this.formatDatetimeLocal(this.entity.dueToDate)
     };
+    if(this.entity.licence != true){
+      this.entity.licence = false;
+    }
 
     this.courtService.createEntity(formattedEntity).subscribe(response => {
       console.log('Legal Entity Created:', response);

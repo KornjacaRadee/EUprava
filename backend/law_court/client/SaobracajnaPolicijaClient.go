@@ -29,7 +29,7 @@ func NewSaobracajnaPolicijaClient(baseURL string) *SaobracajnaPolicijaClient {
 }
 
 func (c *SaobracajnaPolicijaClient) FetchPrekrsaji(ctx context.Context) ([]Violation, error) {
-	req, err := http.NewRequestWithContext(ctx, "GET", c.baseURL+"/prekrsaji", nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", c.baseURL+"/nesreca", nil)
 	if err != nil {
 		return nil, err
 	}

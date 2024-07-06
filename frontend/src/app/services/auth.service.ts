@@ -67,6 +67,10 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
+  tokenInUse() {
+    return localStorage.getItem(this.tokenKey) != undefined && localStorage.getItem(this.tokenKey) != null;
+  }
+
   getUserRole(): string | null {
     const token = this.getAuthToken();
     if (token) {
@@ -74,6 +78,16 @@ export class AuthService {
       return decodedToken.roles;
     }
     return null;
+  }
+
+
+  getUserJMBG(): string {
+    const token = this.getAuthToken();
+    if (token) {
+      const decodedToken = this.helper.decodeToken(token);
+      return decodedToken.jmbg;
+    }
+    return "";
   }
 
   getUserId(): string {
@@ -85,7 +99,7 @@ export class AuthService {
     return "";
   }
 
-//  commented for merging because I think this doesn't get used anywhere 
+//  commented for merging because I think this doesn't get used anywhere
 //   getUserJMBG(): string {
 //     const token = this.getAuthToken();
 //     if (token) {

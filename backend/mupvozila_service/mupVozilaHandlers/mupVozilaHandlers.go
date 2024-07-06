@@ -72,11 +72,8 @@ func RegisterVehicleHandler(w http.ResponseWriter, r *http.Request) {
 func UpdateLicenseValidityHandler(dbClient *mongo.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
-		userID, err := primitive.ObjectIDFromHex(params["id"])
-		if err != nil {
-			http.Error(w, "Invalid userID", http.StatusBadRequest)
-			return
-		}
+		userID := params["id"]
+
 		category := params["category"]
 
 		var req UpdateValidityRequest
@@ -85,7 +82,7 @@ func UpdateLicenseValidityHandler(dbClient *mongo.Client) http.HandlerFunc {
 			return
 		}
 
-		log.Printf("Updating licenses for user ID: %s and category: %s to IsValid: %v\n", userID.Hex(), category, req.IsValid)
+		log.Printf("Updating licenses for user ID: == and category: %s to IsValid: %v\n", category, req.IsValid)
 
 		result, err := data.UpdateLicenseValidityByUserIDAndCategory(userID, category, req.IsValid)
 		if err != nil {
