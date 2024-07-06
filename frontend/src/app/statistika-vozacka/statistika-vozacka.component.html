@@ -1,0 +1,39 @@
+<!-- statistika-vozackih-dozvola.component.html -->
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-header text-center">
+          <h2>Statistika Vozackih Dozvola</h2>
+        </div>
+        <div class="card-body">
+          <div *ngIf="statistika.length">
+            <table class="table table-striped table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Godisnji Broj Izdatih Dozvola</th>
+                  <th scope="col">Najcesca Kategorija</th>
+                  <th scope="col">Godisnji Broj Kaznenih Bodova</th>
+                  <!-- Add more headers as per your data structure -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of statistika">
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.godisnjiBrojIzdatihDozvola }}</td>
+                  <td>{{ item.najcescaKategorija }}</td>
+                  <td>{{ item.godisnjiBrojKaznenihBodova }}</td>
+                  <!-- Add more columns as per your data structure -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="!statistika.length">
+            <p class="text-center">No data available.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

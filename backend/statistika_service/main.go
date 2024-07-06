@@ -37,7 +37,7 @@ func main() {
 
 	saobracajnaPolicijaClient := client.NewSaobracajnaPolicijaClient("http://saobracajna_policija:8084")
 	mupVozilaClient := client.NewMupVozilaClient("http://mupvozila_service:8081")
-	lawCourtClient := client.NewLawCourtClient("http://auth_service:8082")
+	lawCourtClient := client.NewLawCourtClient("http://law_court:8083")
 
 	r := mux.NewRouter()
 

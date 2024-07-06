@@ -15,16 +15,23 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-etitities.component';
 
 import { TrafficPoliceComponent } from './traffic-police.service/traffic-police.service.component';
-
-
-
-
-
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 import { MupvozilaComponent } from './mupvozila/mupvozila.component';
 import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police-data.component';
-
+import { StatistikaPrekrsajaComponent } from './statistika-prekrsaja/statistika-prekrsaja.component';
+import { StatistikaNesrecaComponent } from './statistika-nesreca/statistika-nesreca.component';
+import { StatistikaVozackaComponent } from './statistika-vozacka/statistika-vozacka.component';
+import { StatistikaRegistracijaComponent } from './statistika-registracija/statistika-registracija.component';
+import { StatistikaAutaComponent } from './statistika-auta/statistika-auta.component';
+import { StatistikaHomeComponent } from './statistika-home/statistika-home.component';
+import { StatistikaSaslusanjaComponent } from './statistika-saslusanja/statistika-saslusanja.component';
+import { StatistikaPretresaComponent } from './statistika-pretresa/statistika-pretresa.component';
+import { StatistikaZahtevaComponent } from './statistika-zahteva/statistika-zahteva.component';
 
 @NgModule({
   declarations: [
@@ -36,18 +43,20 @@ import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police
     CreateLawEtititiesComponent,
 
     TrafficPoliceComponent,
-    
-    
-    
-    
-    
 
     MupvozilaComponent,
     MupvozilaHomeComponent,
     UserDashboardComponent,
-    TrafficPoliceDataComponent
-
-
+    TrafficPoliceDataComponent,
+    StatistikaPrekrsajaComponent,
+    StatistikaNesrecaComponent,
+    StatistikaVozackaComponent,
+    StatistikaRegistracijaComponent,
+    StatistikaAutaComponent,
+    StatistikaHomeComponent,
+    StatistikaSaslusanjaComponent,
+    StatistikaPretresaComponent,
+    StatistikaZahtevaComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,9 +66,13 @@ import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatInputModule,
+    MatTableModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

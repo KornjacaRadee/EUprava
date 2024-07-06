@@ -4,13 +4,13 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type StatistikaPrekrsaja struct {
 	ID                    primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	GodisnjiBrojPrekrsaja string             `bson:"godisnjiBrojPrekrsaja" json:"godisnjibBojPrekrsaja"`
+	GodisnjiBrojPrekrsaja string             `bson:"godisnjiBrojPrekrsaja" json:"godisnjibBrojPrekrsaja"`
 	NajcescaLokacija      string             `bson:"najcescaLokacija" json:"najcescaLokacija"`
 	NajcesceVozilo        string             `bson:"najcesceVozilo" json:"najcesceVozilo"`
 }
 type StatistikaNesreca struct {
 	ID                  primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	GodisnjiBrojNesreca string             `bson:"godisnjiBrojNesreca" json:"godisnjibBojNesreca"`
+	GodisnjiBrojNesreca string             `bson:"godisnjiBrojNesreca" json:"godisnjibBrojNesreca"`
 	NajcescaLokacija    string             `bson:"najcescaLokacija" json:"najcescaLokacija"`
 	NajcesceVozilo      string             `bson:"najcesceVozilo" json:"najcesceVozilo"`
 }
@@ -30,7 +30,7 @@ type StatistikaRegistrovanihVozila struct {
 type StatistikaAuta struct {
 	ID                        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	UkupanBrojVozila          string             `bson:"ukupanBrojVozila" json:"ukupanBrojVozila"`
-	NajcesciModel             string             `bson:"NajcesciModel" json:"NajcesciModel"`
+	NajcesciModel             string             `bson:"najcesciModel" json:"najcesciModel"`
 	NajcescaGodinaProizvodnje string             `bson:"najcescaGodinaProizvodnje" json:"najcescaGodinaProizvodnje"`
 }
 
