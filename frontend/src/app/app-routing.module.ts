@@ -13,6 +13,7 @@ import { MupvozilaComponent } from './mupvozila/mupvozila.component';
 import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
 import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police-data.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { MupvozilaCommunicationComponent } from './mupvozila-communication/mupvozila-communication.component';
 const routes: Routes = [
   {
     path: '',
@@ -59,6 +60,10 @@ const routes: Routes = [
   { 
     path: 'user-dashboard', 
     component: UserDashboardComponent
+  },
+  {
+    path: 'mupvozila-communication',
+    component: MupvozilaCommunicationComponent
   }
 
 
