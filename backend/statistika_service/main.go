@@ -2,102 +2,85 @@ package main
 
 import (
 	"context"
-	gorillaHandlers "github.com/gorilla/handlers"
+	"fmt"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
-	"statistika_service/config"
-	"statistika_service/data"
-	handlers "statistika_service/vehicleRegistrationHandlers"
+	"statistika_service/client"
+	"statistika_service/handler"
 	"time"
 )
 
 func main() {
+	dburi := os.Getenv("MONGO_DB_URI")
+	clientOptions := options.Client().ApplyURI(dburi)
+
+	dbClient, err := mongo.Connect(context.TODO(), clientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = dbClient.Ping(context.TODO(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
-		port = "8083"
+		port = "8085"
 	}
 
-	// Initialize context
-	timeoutContext, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
+	saobracajnaPolicijaClient := client.NewSaobracajnaPolicijaClient("http://saobracajna_policija:8084")
+	mupVozilaClient := client.NewMupVozilaClient("http://mupvozila_service:8081")
+	lawCourtClient := client.NewLawCourtClient("http://law_court:8083")
 
-	//Initialize the logger we are going to use, with prefix and datetime for every log
-	//logger := log.New(os.Stdout, "[product-api] ", log.LstdFlags)
-	//storeLogger := log.New(os.Stdout, "[accommodation-store] ", log.LstdFlags)
-	//imageStorageLogger := log.New(os.Stdout, "[accommodation-image_storage] ", log.LstdFlags)
-	//redisLogger := log.New(os.Stdout, "[accommodation-cache] ", log.LstdFlags)
-	logger := config.NewLogger("./logging/log.log")
-	// NoSQL: Initialize Accommodation Repository store
-	store, err := data.New(timeoutContext, logger)
-	if err != nil {
-		logger.Fatalf("Failed initializing Accommodation Repository Store", err)
-	}
-	defer store.Disconnect(timeoutContext)
+	r := mux.NewRouter()
 
-	// NoSQL: Checking if the connection was established
-	store.Ping()
+	r.HandleFunc("/statistikaPrekrsaja", handler.CreatePrekrsajiStatistika(saobracajnaPolicijaClient)).Methods("GET")
+	r.HandleFunc("/statistikaNesreca", handler.CreateNesrecaStatistika(saobracajnaPolicijaClient)).Methods("GET")
+	r.HandleFunc("/statistikaVozackihDozvola", handler.CreateVozackihDozvolaStatistika(mupVozilaClient)).Methods("GET")
+	r.HandleFunc("/statistikaRegistrovanihVozila", handler.CreateRegistrovanihVozilaStatistika(mupVozilaClient)).Methods("GET")
+	r.HandleFunc("/statistikaAuta", handler.CreateStatistikaAuta(mupVozilaClient)).Methods("GET")
+	r.HandleFunc("/statistikaNalogaZaPretres", handler.CreateNaloziZaPretresStatistika(lawCourtClient)).Methods("GET")
+	r.HandleFunc("/statistikaSaslusanja", handler.CreateStatistikaSaslusanja(lawCourtClient)).Methods("GET")
+	r.HandleFunc("/statistikaPravnogZahteva", handler.CreateStatistikaPravnogZahteva(lawCourtClient)).Methods("GET")
+	r.HandleFunc("/calculatePercentageNP", handler.CalculatePercentageNesrecaPrekrsaj).Methods("GET")
+	r.HandleFunc("/calculatePercentageVR", handler.CalculatePercentageVozilaDozvola).Methods("GET")
+	r.HandleFunc("/calculatePercentageRA", handler.CalculatePercentageRegisteredVehiclesToCars).Methods("GET")
+	r.HandleFunc("/calculatePercentagePN", handler.CalculatePercentagePrekrsajiNesreca).Methods("GET")
+	r.HandleFunc("/calculatePercentageRV", handler.CalculatePercentageREGVOZ).Methods("GET")
 
-	//Initialize the handler and inject logger
-	vehicleRegistrationHandler := handlers.NewVehicleRegistrationHandler(logger, store)
+	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"})
+	origins := handlers.AllowedOrigins([]string{"*"})
 
-	//Initialize the router and add a middleware for all the requests
-	router := mux.NewRouter()
-	router.Use(vehicleRegistrationHandler.MiddlewareContentTypeSet)
-
-	getRouter := router.Methods(http.MethodGet).Subrouter()
-	getRouter.HandleFunc("/all", vehicleRegistrationHandler.GetAllVehicles)
-	//getRouter.HandleFunc("/accommodation/walk", vehicleRegistrationHandler.WalkRoot)
-	getRouter.HandleFunc("/{id}", vehicleRegistrationHandler.GetVehicle)
-
-	postRouter := router.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/new", vehicleRegistrationHandler.PostVehicleRegistration)
-	postRouter.Use(vehicleRegistrationHandler.MiddlewareVehicleDeserialization)
-
-	patchRouter := router.Methods(http.MethodPatch).Subrouter()
-	patchRouter.HandleFunc("/patch/{id}", vehicleRegistrationHandler.PatchVehicleRegistration)
-	patchRouter.Use(vehicleRegistrationHandler.MiddlewareVehicleDeserialization)
-
-	deleteRouter := router.Methods(http.MethodDelete).Subrouter()
-	deleteRouter.HandleFunc("/delete/{id}", vehicleRegistrationHandler.DeleteVehicleRegistration)
-	// ...
-
-	// Start server
-
-	//router.Use(handlers2.AuthMiddleware)
-
-	cors := gorillaHandlers.CORS(gorillaHandlers.AllowedOrigins([]string{"*"}))
-
-	//Initialize the server
-	server := http.Server{
-		Addr:         ":" + port,
-		Handler:      cors(router),
-		IdleTimeout:  120 * time.Second,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
+	srv := &http.Server{
+		Handler:      handlers.CORS(headers, methods, origins)(r),
+		Addr:         fmt.Sprintf(":%s", port),
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
 	}
 
-	logger.Println("Server listening on port", port)
-	//Distribute all the connections to goroutines
 	go func() {
-		err := server.ListenAndServe()
-		if err != nil {
-			logger.Fatalf("Cannot distribute all the connections to goroutines", err)
+		if err := srv.ListenAndServe(); err != nil {
+			log.Printf("ListenAndServe error: %v\n", err)
 		}
 	}()
 
-	sigCh := make(chan os.Signal)
-	signal.Notify(sigCh, os.Interrupt)
-	signal.Notify(sigCh, os.Kill)
+	log.Printf("Server running on port %s\n", port)
 
-	sig := <-sigCh
-	logger.Println("Received terminate, graceful shutdown", sig)
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
 
-	//Try to shut down gracefully
-	if server.Shutdown(timeoutContext) != nil {
-		logger.Fatalf("Cannot gracefully shutdown...")
-	}
-	logger.Println("Server stopped")
+	<-c
+	log.Println("shutting down")
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	srv.Shutdown(ctx)
+	dbClient.Disconnect(ctx)
 }

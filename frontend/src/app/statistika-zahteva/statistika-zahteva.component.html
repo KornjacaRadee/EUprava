@@ -1,0 +1,38 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-header text-center">
+          <h2>Statistika Pravnih Zahteva</h2>
+        </div>
+        <div class="card-body">
+          <div *ngIf="statistika.length">
+            <table class="table table-striped table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Najčešći Razlog Zahteva</th>
+                  <th scope="col">Najčešći Korisnik</th>
+                  <th scope="col">Broj Godišnjih Zahteva</th>
+                  <!-- Dodajte još zaglavlja prema strukturi podataka -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of statistika">
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.najcesciRazlog }}</td>
+                  <td>{{ item.najcesciKorisnik }}</td>
+                  <td>{{ item.brojGodisnjihZahteva }}</td>
+                  <!-- Dodajte još kolona prema strukturi podataka -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="!statistika.length">
+            <p class="text-center">Nema dostupnih podataka.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

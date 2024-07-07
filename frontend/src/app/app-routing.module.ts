@@ -8,12 +8,22 @@ import { CreateLawEtititiesComponent } from './create-law-etitities/create-law-e
 
 import { TrafficPoliceComponent } from './traffic-police.service/traffic-police.service.component';
 
-
 import { MupvozilaComponent } from './mupvozila/mupvozila.component';
 import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
 import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police-data.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { StatistikaPrekrsajaComponent } from './statistika-prekrsaja/statistika-prekrsaja.component';
+import { StatistikaNesrecaComponent } from './statistika-nesreca/statistika-nesreca.component';
+import { StatistikaVozackaComponent } from './statistika-vozacka/statistika-vozacka.component';
+import { StatistikaRegistracijaComponent } from './statistika-registracija/statistika-registracija.component';
+import { StatistikaAutaComponent } from './statistika-auta/statistika-auta.component';
+import { StatistikaHomeComponent } from './statistika-home/statistika-home.component';
+import { StatistikaSaslusanjaComponent } from './statistika-saslusanja/statistika-saslusanja.component';
+import { StatistikaPretresaComponent } from './statistika-pretresa/statistika-pretresa.component';
+import { StatistikaZahtevaComponent } from './statistika-zahteva/statistika-zahteva.component';
+
 import { MupvozilaCommunicationComponent } from './mupvozila-communication/mupvozila-communication.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -41,10 +51,8 @@ const routes: Routes = [
     component: CreateLawEtititiesComponent,
   },
   {
-
     path: 'traffic-police',
     component: TrafficPoliceComponent,
-
   },
   {
     path: 'mupvozila',
@@ -55,8 +63,49 @@ const routes: Routes = [
   {
     path: 'mupvozila-home',
     component: MupvozilaHomeComponent,
-
   },
+
+  {
+    path: 'user-dashboard',
+    component: UserDashboardComponent,
+  },
+  {
+    path: 'statistika-prekrsaja',
+    component: StatistikaPrekrsajaComponent,
+  },
+  {
+    path: 'statistika-nesreca',
+    component: StatistikaNesrecaComponent,
+  },
+  {
+    path: 'statistika-vozackih',
+    component: StatistikaVozackaComponent,
+  },
+  {
+    path: 'statistika-registracija',
+    component: StatistikaRegistracijaComponent,
+  },
+  {
+    path: 'statistika-auta',
+    component: StatistikaAutaComponent,
+  },
+  {
+    path: 'statistika-home',
+    component: StatistikaHomeComponent,
+  },
+  {
+    path: 'statistika-saslusanja',
+    component: StatistikaSaslusanjaComponent,
+  },
+  {
+    path: 'statistika-pretresa',
+    component: StatistikaPretresaComponent,
+  },
+  {
+    path: 'statistika-zahteva',
+    component: StatistikaZahtevaComponent,
+  },
+
   { 
     path: 'user-dashboard', 
     component: UserDashboardComponent
@@ -67,10 +116,11 @@ const routes: Routes = [
   }
 
 
+
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
