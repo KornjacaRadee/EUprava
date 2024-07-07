@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import {HTTP_INTERCEPTORS}from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CourtHomeComponent } from './court-home/court-home.component';
@@ -38,9 +38,6 @@ import { StatistikaZahtevaComponent } from './statistika-zahteva/statistika-zaht
 import { MupvozilaCommunicationComponent } from './mupvozila-communication/mupvozila-communication.component';
 import { TokeninterceptorInterceptor } from './services/interceptors/tokeninterceptor.interceptor';
 
-
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,14 +48,6 @@ import { TokeninterceptorInterceptor } from './services/interceptors/tokeninterc
     CreateLawEtititiesComponent,
 
     TrafficPoliceComponent,
-
-
-
-
-
-
-
-
 
     MupvozilaComponent,
     MupvozilaHomeComponent,
@@ -75,10 +64,7 @@ import { TokeninterceptorInterceptor } from './services/interceptors/tokeninterc
     StatistikaPretresaComponent,
     StatistikaZahtevaComponent,
 
-    MupvozilaCommunicationComponent
-
-
-
+    MupvozilaCommunicationComponent,
   ],
   imports: [
     BrowserModule,
@@ -95,17 +81,13 @@ import { TokeninterceptorInterceptor } from './services/interceptors/tokeninterc
     MatTableModule,
   ],
 
-  providers: [],
-  bootstrap: [AppComponent],
-
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokeninterceptorInterceptor,
-      multi: true
+      multi: true,
     },
   ],
-  bootstrap: [AppComponent]
-
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
