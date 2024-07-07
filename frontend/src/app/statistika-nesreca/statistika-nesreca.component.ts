@@ -8,10 +8,12 @@ import { StatisticsService } from '../statistics.service';
 })
 export class StatistikaNesrecaComponent implements OnInit {
   statistika: any[] = [];
+  procenat: number | null = null;
 
   constructor(private statistikaService: StatisticsService) {}
   ngOnInit(): void {
     this.fetchStatistikaNesreca();
+    this.fetchStatistikaProcenatNP();
   }
 
   fetchStatistikaNesreca(): void {
@@ -21,6 +23,19 @@ export class StatistikaNesrecaComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching statistika nesreca:', error);
+      }
+    );
+  }
+
+  fetchStatistikaProcenatNP(): void {
+    this.statistikaService.getStatistikaProcenatNP().subscribe(
+      (data) => {
+        console.log('Statistika procenat NP:', data);
+        this.procenat = data.percentage; // Pretpostavljamo da se procenat nalazi u polju 'percentage' objekta
+      },
+      (error) => {
+        console.error('Error fetching statistika procenata:', error);
+        this.procenat = null; // Postavljamo na null u slučaju greške
       }
     );
   }

@@ -51,4 +51,24 @@ export class StatisticsService {
     const url = `${this.baseUrl}/statistikaPravnogZahteva`;
     return this.http.get(url);
   }
+  getStatistikaProcenatNP(): Observable<any> {
+    const url = `${this.baseUrl}/calculatePercentageNP`;
+    return this.http.get(url);
+  }
+  getStatistikaProcenatVR(): Observable<any> {
+    const url = `${this.baseUrl}/calculatePercentageVR`;
+    return this.http.get(url);
+  }
+  getStatistikaProcenatRA(): Observable<any> {
+    const url = `${this.baseUrl}/calculatePercentageRA`;
+    return this.http.get(url);
+  }
+  getStatistikaProcenatPN(): Observable<any> {
+    const url = `${this.baseUrl}/calculatePercentagePN`;
+    return this.http.get(url);
+  }
+  getStatistikaProcenatRV(): Observable<any> {
+    const url = `${this.baseUrl}/calculatePercentageRV`;
+    return this.http.get(url);
+  }
 }

@@ -427,3 +427,170 @@ func CreateStatistikaPravnogZahteva(lawCourtClient *client.LawCourtClient) http.
 		}
 	}
 }
+func CalculatePercentageNesrecaPrekrsaj(w http.ResponseWriter, r *http.Request) {
+	saobracajnaPolicijaClient := client.NewSaobracajnaPolicijaClient("http://saobracajna_policija:8084")
+
+	// Fetch Prekrsaji data
+	prekrsaji, err := saobracajnaPolicijaClient.FetchPrekrsaji(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to fetch prekrsaji: %v", prekrsaji), http.StatusInternalServerError)
+		return
+	}
+
+	// Fetch Nesrece data
+	nesrece, err := saobracajnaPolicijaClient.FetchNesrece(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to fetch nesrece: %v", nesrece), http.StatusInternalServerError)
+		return
+	}
+
+	totalCrashes := len(prekrsaji) // Ukupan broj prekršaja
+	nesrecaCount := len(nesrece)   // Ukupan broj nesreća
+
+	// Calculate percentage of nesreca
+	percentage := (float64(nesrecaCount) / float64(totalCrashes)) * 100
+
+	// Return the percentage as JSON
+	response := map[string]float64{
+		"percentage": percentage,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+func CalculatePercentageVozilaDozvola(w http.ResponseWriter, r *http.Request) {
+	mupVozilaClient := client.NewMupVozilaClient("http://mupvozila_service:8081")
+
+	// Fetch Licenses data
+	licenses, err := mupVozilaClient.FetchLicenses(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to fetch licenses: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Fetch Registered Vehicles data
+	registeredVehicles, err := mupVozilaClient.FetchRegisteredVehicles(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to fetch registered vehicles: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	totalLicenses := len(licenses)
+	totalRegisteredVehicles := len(registeredVehicles)
+
+	// Calculate percentage of registered vehicles relative to total licenses
+	percentage := (float64(totalRegisteredVehicles) / float64(totalLicenses)) * 100
+
+	// Return the percentage as JSON
+	response := map[string]float64{
+		"percentage": percentage,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+func CalculatePercentageRegisteredVehiclesToCars(w http.ResponseWriter, r *http.Request) {
+	mupVozilaClient := client.NewMupVozilaClient("http://mupvozila_service:8081")
+
+	// Fetch Registered Vehicles data
+	registeredVehicles, err := mupVozilaClient.FetchRegisteredVehicles(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to fetch registered vehicles: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Fetch All Cars data
+	allCars, err := mupVozilaClient.FetchCars(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to fetch all cars: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	totalRegisteredVehicles := len(registeredVehicles)
+	totalCars := len(allCars)
+
+	// Calculate percentage of registered vehicles relative to total cars
+	percentage := (float64(totalRegisteredVehicles) / float64(totalCars)) * 100
+
+	// Return the percentage as JSON response
+	response := map[string]float64{
+		"percentage": percentage,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+func CalculatePercentagePrekrsajiNesreca(w http.ResponseWriter, r *http.Request) {
+	saobracajnaPolicijaClient := client.NewSaobracajnaPolicijaClient("http://saobracajna_policija:8084")
+
+	// Fetch Prekrsaji data
+	prekrsaji, err := saobracajnaPolicijaClient.FetchPrekrsaji(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to fetch prekrsaji: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Fetch Nesrece data
+	nesrece, err := saobracajnaPolicijaClient.FetchNesrece(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to fetch nesrece: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	totalCrashes := len(prekrsaji) // Ukupan broj prekršaja
+	nesrecaCount := len(nesrece)   // Ukupan broj nesreća
+
+	// Avoid division by zero
+	if nesrecaCount == 0 {
+		http.Error(w, "nesrecaCount cannot be zero", http.StatusInternalServerError)
+		return
+	}
+
+	// Calculate percentage of prekrsaji relative to nesreca
+	percentage := (float64(totalCrashes) / float64(nesrecaCount)) * 100
+
+	// Return the percentage as JSON
+	response := map[string]float64{
+		"percentage": percentage,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+func CalculatePercentageREGVOZ(w http.ResponseWriter, r *http.Request) {
+	mupVozilaClient := client.NewMupVozilaClient("http://mupvozila_service:8081")
+
+	// Fetch Licenses data
+	licenses, err := mupVozilaClient.FetchLicenses(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to fetch licenses: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Fetch Registered Vehicles data
+	registeredVehicles, err := mupVozilaClient.FetchRegisteredVehicles(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Sprintf("failed to fetch registered vehicles: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	totalLicenses := len(licenses)                     // Ukupan broj dozvola
+	totalRegisteredVehicles := len(registeredVehicles) // Ukupan broj registrovanih vozila
+
+	// Avoid division by zero
+	if totalLicenses == 0 {
+		http.Error(w, "totalLicenses cannot be zero", http.StatusInternalServerError)
+		return
+	}
+
+	// Calculate percentage of registered vehicles relative to total licenses
+	percentage := (float64(totalRegisteredVehicles) / float64(totalLicenses)) * 100
+
+	// Return the percentage as JSON
+	response := map[string]float64{
+		"percentage": percentage,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}

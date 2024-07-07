@@ -8,11 +8,13 @@ import { StatisticsService } from '../statistics.service';
 })
 export class StatistikaVozackaComponent implements OnInit {
   statistika: any[] = [];
+  procenat: number | null = null;
 
   constructor(private statistikaService: StatisticsService) {}
 
   ngOnInit(): void {
     this.fetchStatistikaVozackihDozvola();
+    this.fetchStatistikaProcenatVR();
   }
 
   fetchStatistikaVozackihDozvola(): void {
@@ -22,6 +24,18 @@ export class StatistikaVozackaComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching statistika vozackih dozvola:', error);
+      }
+    );
+  }
+  fetchStatistikaProcenatVR(): void {
+    this.statistikaService.getStatistikaProcenatVR().subscribe(
+      (data) => {
+        console.log('Statistika procenat VR:', data);
+        this.procenat = data.percentage; // Pretpostavljamo da se procenat nalazi u polju 'percentage' objekta
+      },
+      (error) => {
+        console.error('Error fetching statistika procenata:', error);
+        this.procenat = null; // Postavljamo na null u slučaju greške
       }
     );
   }

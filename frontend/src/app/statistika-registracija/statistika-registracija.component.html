@@ -1,10 +1,9 @@
-<!-- statistika-vozackih-dozvola.component.html -->
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-md-10">
       <div class="card">
         <div class="card-header text-center">
-          <h2>Statistika Vozackih Dozvola</h2>
+          <h2>Statistika Registracije Vozila</h2>
         </div>
         <div class="card-body">
           <div *ngIf="statistika.length">
@@ -15,7 +14,6 @@
                   <th scope="col">Broj Registrovanih Vozila</th>
                   <th scope="col">Prosecni Period Vazenja</th>
                   <th scope="col">Najcesce Registrovano Vozilo</th>
-                  <!-- Add more headers as per your data structure -->
                 </tr>
               </thead>
               <tbody>
@@ -24,13 +22,36 @@
                   <td>{{ item.brojRegistrovanihVozila }}</td>
                   <td>{{ item.prosecniPeriodVazenja }}</td>
                   <td>{{ item.najcesceRegistrovanoVozilo }}</td>
-                  <!-- Add more columns as per your data structure -->
                 </tr>
               </tbody>
             </table>
           </div>
           <div *ngIf="!statistika.length">
             <p class="text-center">No data available.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-body">
+          <!-- Display percentage -->
+          <div class="mt-3" *ngIf="procenat !== undefined">
+            <h4 class="text-center">
+              Procenat vozackih dozvola u odnosu na ukupan broj registrovanih
+              vozila:
+              {{ procenat }}%
+            </h4>
+          </div>
+          <div class="mt-3" *ngIf="procenat === undefined">
+            <p class="text-center">Loading percentage...</p>
+          </div>
+          <div class="mt-3" *ngIf="procenat === null">
+            <p class="text-center">Failed to fetch percentage.</p>
           </div>
         </div>
       </div>

@@ -52,6 +52,11 @@ export class ConfigService {
   _create_statistic_pretres: string;
   _crate_statistic_saslusanje: string;
   _create_statistic_pravni_zahtev: string;
+  _create_statistic_procenat_np: string;
+  _crate_statistic_procenat_vr: string;
+  _create_statistic_procenat_ra: string;
+  _create_statistic_procenat_pn: string;
+  _crate_statistic_procenat_rv: string;
   _statistic_url: string;
 
   constructor() {
@@ -124,5 +129,15 @@ export class ConfigService {
       this._statistic_url + '/statistikaSaslusanja';
     this._create_statistic_pravni_zahtev =
       this._statistic_url + '/statistikaPravnogZahteva';
+    this._create_statistic_procenat_np =
+      this._statistic_url + '/calculatePercentageNP';
+    this._crate_statistic_procenat_vr =
+      this._statistic_url + '/calculatePercentageVR';
+    this._create_statistic_procenat_ra =
+      this._statistic_url + '/calculatePercentageRA';
+    this._create_statistic_procenat_pn =
+      this._statistic_url + '/calculatePercentagePN';
+    this._crate_statistic_procenat_rv =
+      this._statistic_url + '/calculatePercentageRV';
   }
 }

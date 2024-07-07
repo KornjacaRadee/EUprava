@@ -22,6 +22,7 @@ type Nesreca struct {
 	Vozac    string             `bson:"vozac,omitempty" json:"vozac"`
 	Opis     string             `bson:"opis,omitempty" json:"opis"`
 }
+
 type SaobracajnaPolicijaClient struct {
 	baseURL string
 	client  *http.Client

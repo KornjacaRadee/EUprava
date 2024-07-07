@@ -49,6 +49,11 @@ func main() {
 	r.HandleFunc("/statistikaNalogaZaPretres", handler.CreateNaloziZaPretresStatistika(lawCourtClient)).Methods("GET")
 	r.HandleFunc("/statistikaSaslusanja", handler.CreateStatistikaSaslusanja(lawCourtClient)).Methods("GET")
 	r.HandleFunc("/statistikaPravnogZahteva", handler.CreateStatistikaPravnogZahteva(lawCourtClient)).Methods("GET")
+	r.HandleFunc("/calculatePercentageNP", handler.CalculatePercentageNesrecaPrekrsaj).Methods("GET")
+	r.HandleFunc("/calculatePercentageVR", handler.CalculatePercentageVozilaDozvola).Methods("GET")
+	r.HandleFunc("/calculatePercentageRA", handler.CalculatePercentageRegisteredVehiclesToCars).Methods("GET")
+	r.HandleFunc("/calculatePercentagePN", handler.CalculatePercentagePrekrsajiNesreca).Methods("GET")
+	r.HandleFunc("/calculatePercentageRV", handler.CalculatePercentageREGVOZ).Methods("GET")
 
 	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"})
