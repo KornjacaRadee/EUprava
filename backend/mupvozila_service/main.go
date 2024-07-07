@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"mupvozila_service/client"
 	"net/http"
 	"os"
 	"os/signal"
@@ -41,6 +42,13 @@ func main() {
 	}
 
 	r := mux.NewRouter()
+	saobracajnaClient := client.NewSaobracajnaPolicijaClient(&http.Client{}, "http://saobracajna_policija:8084")
+	//authClient := client.NewAuthClient(&http.Client{}, "http://auth_service:8082")
+
+	mupHandler := mupVozilaHandlers.NewHandler(saobracajnaClient)
+
+	// Define the route
+	r.HandleFunc("/nesrece/vozac/{vozac}", mupHandler.GetNesreceByVozacHandler).Methods("GET")
 
 	// Routes
 	r.HandleFunc("/licenses", mupVozilaHandlers.IssueLicenseHandler).Methods("POST")

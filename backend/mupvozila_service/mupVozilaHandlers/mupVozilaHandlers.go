@@ -1,11 +1,13 @@
 package mupVozilaHandlers
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"mupvozila_service/client"
 	"mupvozila_service/data"
 	"net/http"
 )
@@ -402,5 +404,33 @@ func GetLicencesByUserID(dbClient *mongo.Client) http.HandlerFunc {
 
 		log.Println("Licenses retrieved:", licences) // Log the retrieved licenses
 		json.NewEncoder(w).Encode(licences)
+	}
+}
+
+// Handler struct for dependencies
+type Handler struct {
+	saobracajnaClient *client.SaobracajnaPolicijaClient
+}
+
+func NewHandler(saobracajnaClient *client.SaobracajnaPolicijaClient) *Handler {
+	return &Handler{
+		saobracajnaClient: saobracajnaClient,
+	}
+}
+
+// GetNesreceByVozacHandler handles requests to get nesrece by vozac
+func (h *Handler) GetNesreceByVozacHandler(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	vozac := params["vozac"]
+
+	nesrece, err := h.saobracajnaClient.GetAllNesreceByVozac(context.Background(), vozac)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(nesrece); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

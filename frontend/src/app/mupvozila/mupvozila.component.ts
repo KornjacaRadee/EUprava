@@ -168,5 +168,9 @@ export class MupvozilaComponent implements OnInit {
     }
     return date.toISOString();
   }
+
+  navigateToAccidents() {
+    this.router.navigate(['/mupvozila-communication']);
+  }
 }
 
