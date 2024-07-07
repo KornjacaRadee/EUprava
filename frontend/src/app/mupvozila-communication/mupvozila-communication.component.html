@@ -1,0 +1,37 @@
+<div class="container accidents-container">
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Proveri prethodne nesrece vozaca</h2>
+        <form (ngSubmit)="getAccidents()">
+          <div class="form-group">
+            <label for="driverId">Vozac</label>
+            <input type="text" class="form-control" id="driverId" [(ngModel)]="driverId" name="driverId" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Proveri nesrece</button>
+        </form>
+      </div>
+    </div>
+  
+    <div class="row mt-4" *ngIf="accidents.length > 0">
+      <div class="col-md-12">
+        <h3>Nesrece</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Lokacija</th>
+              <th>Vozilo</th>
+              <th>Opis nesrece</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let accident of accidents">
+              <td>{{ accident.lokacija }}</td>
+              <td>{{ accident.vozilo }}</td>
+              <td>{{ accident.opis }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  

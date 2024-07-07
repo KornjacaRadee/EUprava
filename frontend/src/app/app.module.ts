@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import {HTTP_INTERCEPTORS}from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CourtHomeComponent } from './court-home/court-home.component';
@@ -23,6 +24,7 @@ import { MupvozilaComponent } from './mupvozila/mupvozila.component';
 import { MupvozilaHomeComponent } from './mupvozila-home/mupvozila-home.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { TrafficPoliceDataComponent } from './traffic-police-data/traffic-police-data.component';
+
 import { StatistikaPrekrsajaComponent } from './statistika-prekrsaja/statistika-prekrsaja.component';
 import { StatistikaNesrecaComponent } from './statistika-nesreca/statistika-nesreca.component';
 import { StatistikaVozackaComponent } from './statistika-vozacka/statistika-vozacka.component';
@@ -32,6 +34,12 @@ import { StatistikaHomeComponent } from './statistika-home/statistika-home.compo
 import { StatistikaSaslusanjaComponent } from './statistika-saslusanja/statistika-saslusanja.component';
 import { StatistikaPretresaComponent } from './statistika-pretresa/statistika-pretresa.component';
 import { StatistikaZahtevaComponent } from './statistika-zahteva/statistika-zahteva.component';
+
+import { MupvozilaCommunicationComponent } from './mupvozila-communication/mupvozila-communication.component';
+import { TokeninterceptorInterceptor } from './services/interceptors/tokeninterceptor.interceptor';
+
+
+
 
 @NgModule({
   declarations: [
@@ -44,10 +52,19 @@ import { StatistikaZahtevaComponent } from './statistika-zahteva/statistika-zaht
 
     TrafficPoliceComponent,
 
+
+
+
+
+
+
+
+
     MupvozilaComponent,
     MupvozilaHomeComponent,
     UserDashboardComponent,
     TrafficPoliceDataComponent,
+
     StatistikaPrekrsajaComponent,
     StatistikaNesrecaComponent,
     StatistikaVozackaComponent,
@@ -57,6 +74,11 @@ import { StatistikaZahtevaComponent } from './statistika-zahteva/statistika-zaht
     StatistikaSaslusanjaComponent,
     StatistikaPretresaComponent,
     StatistikaZahtevaComponent,
+
+    MupvozilaCommunicationComponent
+
+
+
   ],
   imports: [
     BrowserModule,
@@ -72,7 +94,18 @@ import { StatistikaZahtevaComponent } from './statistika-zahteva/statistika-zaht
     MatInputModule,
     MatTableModule,
   ],
+
   providers: [],
   bootstrap: [AppComponent],
+
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokeninterceptorInterceptor,
+      multi: true
+    },
+  ],
+  bootstrap: [AppComponent]
+
 })
 export class AppModule {}

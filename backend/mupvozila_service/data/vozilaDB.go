@@ -2,11 +2,11 @@ package data
 
 import (
 	"context"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
-	"log"
-    "fmt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 )
 
 var (
@@ -33,8 +33,8 @@ func InsertLicense(license *License) (*mongo.InsertOneResult, error) {
 	}
 	return result, err
 }
-func UpdateLicenseValidityByUserIDAndCategory(userID primitive.ObjectID, category string, isValid bool) (*mongo.UpdateResult, error) {
-	filter := bson.M{"user_id": userID, "category": category}
+func UpdateLicenseValidityByUserIDAndCategory(userID string, category string, isValid bool) (*mongo.UpdateResult, error) {
+	filter := bson.M{"user_jmbg": userID, "category": category}
 
 	// Fetch current values
 	cursor, err := licenseCollection.Find(context.Background(), filter)
@@ -138,7 +138,6 @@ func GetCarsByOwnerJMBG(ownerJMBG string) ([]*Car, error) {
 
 	return cars, nil
 }
-
 
 func GetCarByLicensePlate(ctx context.Context, licensePlate string) (*Car, error) {
 	var car Car
@@ -407,39 +406,39 @@ func UpdateCar(car *Car) error {
 
 // UpdateRegistration updates a registration in the database
 func UpdateRegistration(registration *RegisterVehicle) error {
-    filter := bson.M{"_id": registration.ID}
-    update := bson.M{
-        "$set": bson.M{
-            "car_id":           registration.CarID,
-            "name":             registration.Name,
-            "issuing_date":     registration.IssuingDate,
-            "valid_until_date": registration.ValidUntilDate,
-        },
-    }
-    _, err := registrationCollection.UpdateOne(context.Background(), filter, update)
-    if err != nil {
-        log.Println("Error updating registration:", err)
-    }
-    return err
+	filter := bson.M{"_id": registration.ID}
+	update := bson.M{
+		"$set": bson.M{
+			"car_id":           registration.CarID,
+			"name":             registration.Name,
+			"issuing_date":     registration.IssuingDate,
+			"valid_until_date": registration.ValidUntilDate,
+		},
+	}
+	_, err := registrationCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Println("Error updating registration:", err)
+	}
+	return err
 }
 
 // UpdateLicense updates a license in the database
 func UpdateLicense(license *License) error {
-    filter := bson.M{"_id": license.ID}
-    update := bson.M{
-        "$set": bson.M{
-            "user_jmbg":       license.UserJMBG,
-            "category":        license.Category,
-            "issuing_date":    license.IssuingDate,
-            "valid_until_date": license.ValidUntilDate,
-            "address":         license.Address,
-            "points":          license.Points,
-            "is_valid":        license.IsValid,
-        },
-    }
-    _, err := licenseCollection.UpdateOne(context.Background(), filter, update)
-    if err != nil {
-        log.Println("Error updating license:", err)
-    }
-    return err
+	filter := bson.M{"_id": license.ID}
+	update := bson.M{
+		"$set": bson.M{
+			"user_jmbg":        license.UserJMBG,
+			"category":         license.Category,
+			"issuing_date":     license.IssuingDate,
+			"valid_until_date": license.ValidUntilDate,
+			"address":          license.Address,
+			"points":           license.Points,
+			"is_valid":         license.IsValid,
+		},
+	}
+	_, err := licenseCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Println("Error updating license:", err)
+	}
+	return err
 }

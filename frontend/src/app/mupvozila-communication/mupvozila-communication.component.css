@@ -1,0 +1,19 @@
+.accidents-container {
+    margin-top: 50px; /* Adjust the value as needed */
+  }
+  
+  h2 {
+    margin-top: 20px; /* Additional margin for the heading */
+  }
+  
+  form {
+    margin-top: 20px; /* Additional margin for the form */
+  }
+  
+  table {
+    margin-top: 30px; /* Additional margin for the table */
+  }
+
+  button {
+    margin-top: 5px;
+  }

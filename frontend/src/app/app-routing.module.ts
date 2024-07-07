@@ -21,6 +21,9 @@ import { StatistikaHomeComponent } from './statistika-home/statistika-home.compo
 import { StatistikaSaslusanjaComponent } from './statistika-saslusanja/statistika-saslusanja.component';
 import { StatistikaPretresaComponent } from './statistika-pretresa/statistika-pretresa.component';
 import { StatistikaZahtevaComponent } from './statistika-zahteva/statistika-zahteva.component';
+
+import { MupvozilaCommunicationComponent } from './mupvozila-communication/mupvozila-communication.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -61,6 +64,7 @@ const routes: Routes = [
     path: 'mupvozila-home',
     component: MupvozilaHomeComponent,
   },
+
   {
     path: 'user-dashboard',
     component: UserDashboardComponent,
@@ -101,6 +105,18 @@ const routes: Routes = [
     path: 'statistika-zahteva',
     component: StatistikaZahtevaComponent,
   },
+
+  { 
+    path: 'user-dashboard', 
+    component: UserDashboardComponent
+  },
+  {
+    path: 'mupvozila-communication',
+    component: MupvozilaCommunicationComponent
+  }
+
+
+
 ];
 
 @NgModule({

@@ -1,11 +1,13 @@
 package mupVozilaHandlers
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"mupvozila_service/client"
 	"mupvozila_service/data"
 	"net/http"
 )
@@ -72,11 +74,8 @@ func RegisterVehicleHandler(w http.ResponseWriter, r *http.Request) {
 func UpdateLicenseValidityHandler(dbClient *mongo.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
-		userID, err := primitive.ObjectIDFromHex(params["id"])
-		if err != nil {
-			http.Error(w, "Invalid userID", http.StatusBadRequest)
-			return
-		}
+		userID := params["id"]
+
 		category := params["category"]
 
 		var req UpdateValidityRequest
@@ -85,7 +84,7 @@ func UpdateLicenseValidityHandler(dbClient *mongo.Client) http.HandlerFunc {
 			return
 		}
 
-		log.Printf("Updating licenses for user ID: %s and category: %s to IsValid: %v\n", userID.Hex(), category, req.IsValid)
+		log.Printf("Updating licenses for user ID: == and category: %s to IsValid: %v\n", category, req.IsValid)
 
 		result, err := data.UpdateLicenseValidityByUserIDAndCategory(userID, category, req.IsValid)
 		if err != nil {
@@ -405,5 +404,33 @@ func GetLicencesByUserID(dbClient *mongo.Client) http.HandlerFunc {
 
 		log.Println("Licenses retrieved:", licences) // Log the retrieved licenses
 		json.NewEncoder(w).Encode(licences)
+	}
+}
+
+// Handler struct for dependencies
+type Handler struct {
+	saobracajnaClient *client.SaobracajnaPolicijaClient
+}
+
+func NewHandler(saobracajnaClient *client.SaobracajnaPolicijaClient) *Handler {
+	return &Handler{
+		saobracajnaClient: saobracajnaClient,
+	}
+}
+
+// GetNesreceByVozacHandler handles requests to get nesrece by vozac
+func (h *Handler) GetNesreceByVozacHandler(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	vozac := params["vozac"]
+
+	nesrece, err := h.saobracajnaClient.GetAllNesreceByVozac(context.Background(), vozac)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(nesrece); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

@@ -12,6 +12,7 @@ export class CourtHomeComponent {
   entities: any[] = [];
   warrants: any[] = [];
   currentUser: any;
+  jmbg!: string;
 
   constructor(private courtService: CourtService, private authService: AuthService) { }
 
@@ -19,8 +20,13 @@ export class CourtHomeComponent {
     this.getUserEntities();
     this.getUserWarrants();
     this.getUser();
+    this.getJmbg();
   }
 
+  getJmbg(){
+      this.jmbg = this.authService.getUserJMBG();
+      console.log("From token", this.jmbg)
+  }
   getUserEntities(){
     let id = this.authService.getUserId();
     this.courtService.getUserEntities(id).subscribe((data: any) => {
@@ -33,7 +39,7 @@ export class CourtHomeComponent {
     console.log(this.currentUser)
     const entity = {
       title: "Request for Document",
-      userJMBG: this.currentUser.jmbg,
+      userJMBG: this.jmbg,
       userID: this.currentUser.id
     };
 
@@ -48,7 +54,9 @@ export class CourtHomeComponent {
 
   getUser(){
     let id = this.authService.getUserId();
+    console.log(id);
     this.authService.getUser(id).subscribe((data: any) => {
+      console.log(data);
       this.currentUser = data;
     });
   }
