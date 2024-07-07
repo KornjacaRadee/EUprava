@@ -65,7 +65,7 @@ func CreateLegalRequest(dbClient *mongo.Client, saobracajClient *client.Saobraca
 		userJMBG := legalRequest.UserJMBG // Assuming UserID holds the JMBG
 		userHasPrekrsaj := false
 		for _, prekrsaj := range prekrsaji {
-			if prekrsaj.Vozac == userJMBG {
+			if prekrsaj.Vozilo == userJMBG {
 				userHasPrekrsaj = true
 				break
 			}
@@ -171,10 +171,10 @@ func CreateLegalEntity(dbClient *mongo.Client, authClient *client.AuthClient, mu
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		// FIKSIRAN USERID DOK KOLEGA NE NAMESTI SVOJ SERVIS!!!!!~
+
 		if req.Licence {
 			// Update the licence validity
-			err = mupvozilaClient.UpdateLicenceValidity(context.Background(), "000000000000000000000000", req.Category)
+			err = mupvozilaClient.UpdateLicenceValidity(context.Background(), req.JMBG, req.Category)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return

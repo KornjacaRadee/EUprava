@@ -33,8 +33,8 @@ func InsertLicense(license *License) (*mongo.InsertOneResult, error) {
 	}
 	return result, err
 }
-func UpdateLicenseValidityByUserIDAndCategory(userID primitive.ObjectID, category string, isValid bool) (*mongo.UpdateResult, error) {
-	filter := bson.M{"user_id": userID, "category": category}
+func UpdateLicenseValidityByUserIDAndCategory(userID string, category string, isValid bool) (*mongo.UpdateResult, error) {
+	filter := bson.M{"user_jmbg": userID, "category": category}
 
 	// Fetch current values
 	cursor, err := licenseCollection.Find(context.Background(), filter)
